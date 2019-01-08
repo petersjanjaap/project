@@ -16,7 +16,7 @@ The links used in the API will be the following:
 The World Bank does not allow to obtain data for all countries, all at once. Therefore I can either iterate over all countries in a loop to adjust the API link or narrow the subject to a specific region or look at trade flows from one country to the rest of the world. This problem is exacerbated by the fact that I will need data over time from at least 2000 – 2017, which also needs separate links to load in the data and strongly increased the size of the data file.<br>
 
 **Diagram**
-
+![Diagram](Diagram.png)
 The components will consist of a map from which the user can select a subject country and a selected trade partner. The map should then display a line going from one country to the other. Simultaneously, a stacked graph and a pie chart should appear. The first contains information on the development of total trade value between the two countries, displayed in different sectors. The pie chart displays the different components of GDP in the partner country to compare the composition of GDP sectors to the composition of trade flows. All the visualizations are displayed on the same page.<br>
 **List of API or D3 plugins**
 
