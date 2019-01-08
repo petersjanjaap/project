@@ -1,16 +1,16 @@
 List of data sources: <br>
+===============
 For the project I well need access to the following data: <br>
 -	Total value of export and import in $ between each country and trade partner 2000-2017 <br>
 -	Total value of export and import in $ for the following sectors: ”Raw agricultural, chemicals, food, fuels, manufacturing, Ores and Metals, Textiles, Transport” 2000-2017 <br>
 -	Partner share in % of total and sector export and import value per country 2000-2017 <br>
 -	Components of GDP for all countries worldwide<br>
 The links used in the API will be the following:<br>
-[Total and sectors export and import value in $] (http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/usa/year/2017/partner/ALL/product/Total;AgrRaw;Chemical;Food;Fuels;manuf;OresMtls;Textiles;Transp
+[Total and sectors export and import value in $](http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/usa/year/2017/partner/ALL/product/Total;AgrRaw;Chemical;Food;Fuels;manuf;OresMtls;Textiles;Transp
 /indicator/XPRT-TRD-VL;MPRT-TRD-VL?format=JSON)
 
 
-[Partner share export and import in %] (http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/usa/year/2017/partner/ /product/ /indicator/XPRT-PRTNR-SHR;MPRT-PRTNR-SHR?format=JSON
-)<br>
+[Partner share export and import in %](http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/usa/year/2017/partner/ /product/ /indicator/XPRT-PRTNR-SHR;MPRT-PRTNR-SHR?format=JSON)<br>
 
 The World Bank does not allow to obtain data for all countries, all at once. Therefore I can either iterate over all countries in a loop to adjust the API link or narrow the subject to a specific region or look at trade flows from one country to the rest of the world. This problem is exacerbated by the fact that I will need data over time from at least 2000 – 2017, which also needs separate links to load in the data and strongly increased the size of the data file.<br>
 
