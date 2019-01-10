@@ -1,25 +1,50 @@
-<!-- scatter html lauout -->
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h -->
+  <title>Global Britain</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+    <head>
     <link rel="stylesheet" type="text/css" href="project.css">
       <title>A trade view of Global Britain</title>
   </head>
+
   <body>
+    <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Global Britain</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">World Map of Trade</a></li>
+          <li><a href="#">Trade Graph</a></li>
+          <li><a href="#">GDP Chart</a></li>
+        </ul>
+      </div>
+    </nav>
+
+
     <h4>1045125 Jan Peters</h4>
-    <h2>Linked Views</h2>
-    <h1>Software markt analysis</h1>
-    <h5>
-      Sources: <br>
-      <a href="https://www.investing.com/equities">investing.com</a>
-    </h5>
+        <h1>Global Britain</h1>
     <p>
       Global Britain is the British Cabinet's slogan for its future trade policy.<br>
       Yet how Global is Britain now? And what are the opportunities after Brexit? <br><br>
       This project shows the development of Britain as a trade nation over the years 2000-2017, <br>
       and displays its trade partners, the composition of trade flows and home production of these partners.
     </p>
-    <script type="text/javascript" src="project.js" src="https://d3js.org/d3.v5.js"></script>
-    <script type="text/javascript" src="https://d3js.org/colorbrewer.v1.min.js"></script>
-    <script type="text/javascript" src="https://d3js.org/d3.v5.js"></script>
+
+    <!-- http://form.guide/html-form/html5-input-type-range.html -->
+    <input type="range" name="weight" id="range_weight" value="1" min="2000" max="2017" oninput="range_weight_disp.value = range_weight.value">
+   <output  id="range_weight_disp"></output>
+      <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+      <script type="text/javascript" src="project.js"></script>
 </body>
 </html>
