@@ -6,6 +6,7 @@ from collections import defaultdict
 # define globals
 DATA = defaultdict(int)
 COUNTRIES = defaultdict(int)
+GDP = defaultdict(str)
 
 
 # define functions
@@ -134,6 +135,10 @@ def load_data(link, year, type):
         """
         obs = j['dataSets'][0]['series'][key]['observations']['0'][0]
 
+        # covert obs to float
+        if obs:
+            obs = float(obs)
+
         # check where data should be placed
         if mprt:
 
@@ -154,6 +159,79 @@ def load_data(link, year, type):
                 DATA[year][country][type]['xprt'][sector] = obs
 
 
+def load_GDP():
+    """
+    GDP indicators manufacturing, agr, oil& coals (fuels), mining, services,
+    trade
+    """
+    gdp_vars = ['NV.IND.MANF.ZS', 'NV.AGR.TOTL.ZS', 'NY.GDP.PETR.RT.ZS',
+                'NY.GDP.COAL.RT.ZS', 'NY.GDP.MINR.RT.ZS', 'NV.SRV.TOTL.ZS',
+                'NE.TRD.GNFS.ZS']
+
+    # join indicators and include semicolon
+    indics = ';'.join(gdp_vars)
+
+    # load all data on GDP
+    for country in COUNTRIES:
+
+        GDP[country] = defaultdict(int)
+
+        # add dictionaries to hold info per year
+        for year in range(2000, 2018):
+            GDP[country][year] = defaultdict(str)
+
+            # add entries for all sectors
+            for gdp_var in gdp_vars:
+                GDP[country][year][gdp_var] = None
+
+    # get link for country from api for data on all vars for 2000-2017
+    link = f'http://api.worldbank.org/v2/country/all/indicator/{indics}?source=2&format=json&date=2000:2017'
+
+    # get response and transform to JSON
+    response = requests.get(link)
+    j = json.loads(response.content)
+
+    # the response consists of multiple pages
+    pages = j[0]['pages']
+
+    # go to all pages and extract data
+    for i in range(1, pages + 1):
+        link = f'http://api.worldbank.org/v2/country/ALL/indicator/{indics}?source=2&format=json&date=2000:2017&page={i}'
+
+        # get response and transform to JSON
+        response = requests.get(link)
+        j = json.loads(response.content)
+
+        # dataset is the second element of the json file
+        dataset = j[1]
+
+        # iterate over entries in dataset
+        for data in range(len(dataset)):
+
+            #  extract info
+            ccode = dataset[data]['countryiso3code']
+
+            # check if ccode in countries
+            if ccode:
+
+                # if so add to observations
+                if ccode in COUNTRIES:
+
+                    # get info from observations
+                    year = int(dataset[data]['date'])
+                    gdp_var = dataset[data]['indicator']['id']
+
+                    #  get obs and convert to float
+                    obs = dataset[data]['value']
+                    if obs:
+                        obs = float(obs)
+
+                    # add info to dictionary
+                    GDP[ccode][year][gdp_var] = obs
+
+    print(GDP)
+
+
 def json_save(dictionary, save_title):
     """
     saves dictionary as json file
@@ -169,7 +247,7 @@ def main():
     """
 
     # iterate over years 2000-2017
-    for year in range(2000, 2017):
+    for year in range(2000, 2018):
 
         #  add position to hold information for year
         DATA[year] = defaultdict(str)
@@ -189,9 +267,13 @@ def main():
         # load data for trade values
         load_data(link_values, year, 'trade')
 
+    # load data for GDP values
+    load_GDP()
+
     # convert dataset and countries info to JSON objects and save these
     json_save(DATA, 'dataset.json')
     json_save(COUNTRIES, 'countries.json')
+    json_save(GDP, 'gdp.json')
 
 
 if __name__ == '__main__':
