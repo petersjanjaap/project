@@ -3,6 +3,7 @@ visualization of global trade flows
 
 
 **Veranderingen**
+
 8-1-2019: 
 In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Britain', ofwel handelsstromen van de UK met de rest van de wereld.  
 
