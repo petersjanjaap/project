@@ -12,3 +12,6 @@ In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Brit
 1) Op de pagina heb ik een slider toegevoegd om de handelsstromen over de jaren heen te kunnen bekijken. 
 2) Daarnaast wil ik een van de visualizaties, dan wel de grafiek of de pie chart gaan veranderen in de volgende visualisatie om import export te kunnen vergelijken: http://www.brightpointinc.com/united-states-trade-deficit/
 
+11-2-2019:
+De GDP componenten wil ik in plaats van een pie chart in een bar chart weergeven, omdat dit overzichtelijker is met een totaal van 7 variabelen.
+
