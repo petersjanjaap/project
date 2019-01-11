@@ -7,3 +7,8 @@
 - finished the API-script in Python to download all data. Trade data and data on GDP components for all countries worldwide is now complete.
 - created basic layout for the website, including svg's for all visualizations and buttons for navigation around the page.
 - decided to add a slider to navigate through the years 2000-2017 of GDP and trade data.
+
+#day 4
+- loaded all JSON data to the web page
+- built a world map with D3 and made a prototype with british export flows displayed in colors
+- after mentor meeting decided to substitute pie chart for bar chart for the display of GDP components
