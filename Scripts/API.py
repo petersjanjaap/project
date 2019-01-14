@@ -229,8 +229,6 @@ def load_GDP():
                     # add info to dictionary
                     GDP[ccode][year][gdp_var] = obs
 
-    print(GDP)
-
 
 def json_save(dictionary, save_title):
     """
@@ -258,7 +256,7 @@ def main():
         """
 
         # adjust API for given year
-        link_shares = f'http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/usa/year/{year}/partner/ /product/ /indicator/XPRT-PRTNR-SHR;MPRT-PRTNR-SHR?format=JSON'
+        link_shares = f'http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/gbr/year/{year}/partner/ /product/ /indicator/XPRT-PRTNR-SHR;MPRT-PRTNR-SHR?format=JSON'
         link_values = f'http://wits.worldbank.org/API/V1/SDMX/V21/datasource/tradestats-trade/reporter/gbr/year/{year}/partner/ALL/product/Total;AgrRaw;Chemical;Food;Fuels;manuf;OresMtls;Textiles;Transp/indicator/XPRT-TRD-VL;MPRT-TRD-VL?format=JSON'
 
         # load data for partner shares

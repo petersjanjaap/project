@@ -6,34 +6,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="project.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <title>A trade view of Global Britain</title>
 </head>
-    <head>
-    <link rel="stylesheet" type="text/css" href="project.css">
-      <title>A trade view of Global Britain</title>
-  </head>
-
-  <body>
     <body>
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Global Britain</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">World Map of Trade</a></li>
-          <li><a href="#">Trade Graph</a></li>
-          <li><a href="#">GDP Chart</a></li>
-        </ul>
-      </div>
-    </nav>
-
-
+    <!-- titles  -->
     <h4>1045125 Jan Peters</h4>
         <h1>Global Britain</h1>
+
+    <!-- description  -->
     <p>
       Global Britain is the British Cabinet's slogan for its future trade policy.<br>
       Yet how Global is Britain now? And what are the opportunities after Brexit? <br><br>
@@ -41,10 +25,18 @@
       and displays its trade partners, the composition of trade flows and home production of these partners.
     </p>
 
-    <!-- http://form.guide/html-form/html5-input-type-range.html -->
-    <input type="range" name="weight" id="range_weight" value="1" min="2000" max="2017" oninput="range_weight_disp.value = range_weight.value">
-   <output  id="range_weight_disp"></output>
-      <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
-      <script type="text/javascript" src="project.js"></script>
+    <h2>Year</h2>
+    <div class="row align-items-center">
+      <div class="col-sm-2"><p id="value-step"></p></div>
+      <div class="col-sm"><div id="slider-step"></div></div>
+    </div>
+
+      <!-- sources for scripts  -->
+      <script src="https://d3js.org/d3.v5.min.js"></script>
+      <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+      <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+      <script src="https://unpkg.com/d3-simple-slider/build/d3-simple-slider.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+      <script src="project.js"></script>
 </body>
 </html>
