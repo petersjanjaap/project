@@ -12,3 +12,9 @@
 - loaded all JSON data to the web page
 - built a world map with D3 and made a prototype with british export flows displayed in colors
 - after mentor meeting decided to substitute pie chart for bar chart for the display of GDP components
+
+#day 6
+- worked on map and inserted color scheme. implemented tooltip and changed colors of countries on hoovering
+- implemented bar chart in svg displaying components of trade
+- implemented slider from d3 to slide over years 2000-2017
+- started working on third visualization, either journalism graph from d3 gallery or dynamic sunburst for export and import
