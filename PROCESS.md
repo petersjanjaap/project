@@ -18,3 +18,7 @@
 - implemented bar chart in svg displaying components of trade
 - implemented slider from d3 to slide over years 2000-2017
 - started working on third visualization, either journalism graph from d3 gallery or dynamic sunburst for export and import
+
+#day 7
+- adjusted the structure of the JSON files to name children structure for all nodes by using a recursive function. This allows the usage of       the hierarchy function in D3 in order to build a sun burst chart, which I want to divide between export and import.
+- built a prototype sun burst chart
