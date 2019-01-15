@@ -19,7 +19,7 @@ var r = 160;
 function toolInfo(country) {
   if (trade[2017].hasOwnProperty(country.id)) {
     if (trade[2017][country.id].share.xprt) {
-      return country.id + ", " + Math.floor(trade[2017][country.id].share.xprt * 100) / 100
+      return country.id + ", " + Math.floor(trade[2017][country.id].share.xprt.obs * 100) / 100
     }
   } else {
     return "Unknown"
@@ -220,33 +220,42 @@ Promise.all(promises).then(response => {
   countries = response[2];
   gdp = response[3];
 
+  var mapCountries = [];
+  for (var i in map.features) {
+    mapCountries.push(map.features[i].id)
+  }
+
   // find minimum and maximum export values with all partners
-  var min;
-  var max;
+  var min = 0;
+  var max = 0;
+  var maxcountry;
   for (var country in trade[2017]) {
     if (trade[2017].hasOwnProperty(country)) {
-      if (!min & !max) {
-        max = trade[2017][country].share.xprt;
-        min = trade[2017][country].share.xprt;
-      }
-      else {
 
-        // find minima and maxima of partners share in British export
-        if (trade[2017][country].share.xprt < min) {
-          min = trade[2017][country].share.xprt;
-        } else if (trade[2017][country].share.xprt > max)  {
-          if (trade[2017][country].share.xprt != 100) {
-              max = trade[2017][country].share.xprt;
+      // find minima and maxima of partners share in British export
+      for (var obs in trade[2017][country].share.xprt) {
+        if (trade[2017][country].share.xprt.hasOwnProperty(obs)) {
+          if (trade[2017][country].share.xprt.obs < min) {
+            min = trade[2017][country].share.xprt.obs;
+          } else if (trade[2017][country].share.xprt.obs > max)  {
+            if (mapCountries.indexOf(country) >= 0 ) {
+                max = trade[2017][country].share.xprt.obs;
+                maxcountry = country
+            }
           }
         }
       }
     }
   }
 
+  console.log(max)
+  console.log(maxcountry)
+
   // color for country
   var color = d3.scaleThreshold()
                 .domain(d3.range(min, max))
                 .range(d3.schemeBlues[9]);
+
   // Draw the map
   svgMap.append("g")
         .attr("class", "countries")
@@ -259,7 +268,9 @@ Promise.all(promises).then(response => {
           if (d.id == 'GBR') {
             return ("green")
           } else if (trade[2017].hasOwnProperty(d.id)) {
-            return color(trade[2017][d.id].share.xprt);
+            if (trade[2017][d.id].share.hasOwnProperty('xprt')){
+                return color(trade[2017][d.id].share.xprt.obs);
+            }
           } else {
             return "grey"
           }
@@ -288,7 +299,9 @@ Promise.all(promises).then(response => {
             if (d.id == 'GBR') {
               return ("green")
             } else if (trade[2017].hasOwnProperty(d.id)) {
-              return color(trade[2017][d.id].share.xprt);
+              if (trade[2017][d.id].share.hasOwnProperty('xprt')){
+                  return color(trade[2017][d.id].share.xprt.obs);
+              }
             } else {
               return "grey"
             }
@@ -354,5 +367,102 @@ Promise.all(promises).then(response => {
       .style("text-anchor", "middle")
       .text("$ of trade in sector $");
 
+
+  function childrenObject(jsonObj, name){
+
+    // make new object and keep track of keys in old object
+    var obj = {};
+    var count = 0;
+
+    // add object name
+    obj['name'] = name;
+
+    // iterate over keys in object
+    for (var key in jsonObj) {
+
+      console.log(key)
+      count += 1;
+
+      // generate child object
+      var children = {};
+
+      // check if underlying key has value
+      if (jsonObj[key]) {
+
+        // check if this value is an object
+        var c = 0;
+        for (var keys in jsonObj[key]) {
+          c += 1;
+          continue;
+        }
+
+        // if so use recursion to add new children to current children
+        if (c > 0) {
+
+          // add list to hold children if necessary
+          if (count == 1){
+            obj['children'] = [];
+          }
+
+          children = childrenObject(jsonObj[key], key);
+          obj['children'].push(children);
+        }
+
+        // else bottom value has been reached
+        else {
+          obj['size'] = jsonObj[key]
+        }
+      }
+
+      // else underlying value is missing, but bottom has been reached
+      else {
+        obj['size'] = 0
+      }
+    }
+
+    // return finalised object
+    return obj;
+  }
+
+
+test = childrenObject(trade[2017]["DEU"].trade, 'deu')
+// Variables
+var width = 500;
+var height = 500;
+var radius = Math.min(width, height) / 2;
+var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+// Create primary <g> element
+var g = d3.select('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+// Data strucure
+var partition = d3.partition()
+    .size([2 * Math.PI, radius]);
+
+// Find data root
+var root = d3.hierarchy(test)
+    .sum(function (d) { return d.size});
+
+// Size arcs
+partition(root);
+var arc = d3.arc()
+    .startAngle(function (d) { return d.x0 })
+    .endAngle(function (d) { return d.x1 })
+    .innerRadius(function (d) { return d.y0 })
+    .outerRadius(function (d) { return d.y1 });
+
+// Put it all together
+g.selectAll('path')
+    .data(root.descendants())
+    .enter().append('path')
+    .attr("display", function (d) { return d.depth ? null : "none"; })
+    .attr("d", arc)
+    .style('stroke', '#fff')
+    .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
+  // console.log(root)
   }
 )
