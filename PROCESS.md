@@ -22,3 +22,9 @@
 #day 7
 - adjusted the structure of the JSON files to name children structure for all nodes by using a recursive function. This allows the usage of       the hierarchy function in D3 in order to build a sun burst chart, which I want to divide between export and import.
 - built a prototype sun burst chart
+
+#day 8
+- implemented sunburst chart together with labels
+- splitted code into seperate files for all visualizations
+- started working on updates through slider and map click function
+- minor adjustments to css sheet
