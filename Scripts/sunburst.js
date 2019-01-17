@@ -1,93 +1,125 @@
-
-function computeTextRotation(d) {
-    var angle = (d.x0 + d.x1) / Math.PI * 90;  // <-- 1
-
-    // Avoid upside-down labels
-    // return (angle < 90 || angle > 270) ? angle : angle + 180;  // <--2 "labels aligned with slices"
-
-    // Alternate label formatting
-    return (angle < 180) ? angle - 90 : angle + 90;  // <-- 3 "labels as spokes"
-}
+let radius = Math.min(width, height) / 2 - padding;
+let color = d3.scaleOrdinal(d3.schemeBlues[9]);
 
 
-function sunBurstGenerator(data) {
+function sunBurstGenerator(trade, data) {
 
-  // create SVG element for Sun
-  var svgSun = d3.select("body")
-              .append("svg")
-              .attr("class", "Sun")
-              .attr("width", width)
-              .attr("height", height);
+  // format data and obtain vars
+  let obj = childrenObject(data, "DEU");
+  let radius = Math.min(width, height) / 2 - padding;
+  let color = d3.scaleOrdinal(d3.schemeBlues[9]);
 
-  // creates a title
-  svgSun.append("text")
-        .attr("class", "Sun")
-        .attr("x", (width / 2))
-        .attr("y", padding * 0.4)
-        .attr("text-anchor", "middle")
-        .attr("fill", "black")
-        .style("font-size", "20px")
-        .text("Partner country components of GDP");
+  // create primary g element
+  let g = d3.select('#sun')
+    .attr('width', height)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', 'translate(' + height / 2 + ',' + height / 2 + ')');
 
-  // format data
-  data = childrenObject(data);
-
-  var radius = Math.min(width, height) / 2;
-
-  var color = d3.scaleOrdinal(d3.schemeBlues[9]);
-
-  // Create primary <g> element
-  var g = svgSun
-      .append('g')
-      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-
-  // Data strucure
-  var partition = d3.partition()
+  // data strucure
+  let partition = d3.partition()
       .size([2 * Math.PI, radius]);
 
-  // Find data root
-  var root = d3.hierarchy(data)
-      .sum(function (d) { return d.size});
+  // find data root and sorts arc based on observed value
+  let root = d3.hierarchy(obj)
+                .sum(function (d) { return d.size; })
+                .sort(function(a, b) { return b.value - a.value; });
 
-  // Size arcs
+  // size arcs
   partition(root);
+
   var arc = d3.arc()
-              .startAngle(function (d) { return d.x0 })
-              .endAngle(function (d) { return d.x1 })
-              .innerRadius(function (d) { return d.y0 })
-              .outerRadius(function (d) { return d.y1 });
+              .startAngle(d => { return d.x0; })
+              .endAngle(d => { return d.x1; })
+              .innerRadius(d => { return d.y0; })
+              .outerRadius(d => { return d.y1; });
 
-  // Put it all together
-  g.selectAll('path')
-      .data(root.descendants())
-      .enter().append('g').attr("class", "node")
-      .append('path')
-      .attr("display", function (d) { return d.depth ? null : "none"; })
-      .attr("d", arc)
+  // generate slice variable
+  var slice = g.selectAll('g')
+    .data(root.descendants())
+    .enter().append('g').attr('class', 'node');
+
+    slice.append('path').attr('display', function (d) { return d.depth ? null : 'none'; })
+      .attr('d', arc)
       .style('stroke', '#fff')
-      .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
+      .style('fill', function (d) { return color((d.children ? d : d.parent).data.name); });
 
-  // put labels in arc
-  g.selectAll(".node")  // <-- 1
-      .append("text")  // <-- 2
-      .attr("transform", function(d) {
-          return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; }) // <-- 3
-      .attr("dx", "-20")  // <-- 4
-      .attr("dy", ".5em")  // <-- 5
-      .text(function(d) { return d.parent ? d.data.name : "" });
+      // source: https://bl.ocks.org/denjn5/e1cdbbe586ac31747b4a304f8f86efa5
+      function arcTweenPath(a, i) {
+
+        let oi = d3.interpolate({ x0: a.x0s, x1: a.x1s }, a);
+
+        function tween(t) {
+          let b = oi(t);
+          a.x0s = b.x0;
+          a.x1s = b.x1;
+          return arc(b);
+        }
+        return tween;
+      }
+
+
+      // when switching data: interpolate the text centroids and rotation.
+
+      function arcTweenText(a, i) {
+
+        let oi = d3.interpolate({ x0: a.x0s, x1: a.x1s }, a);
+        function tween(t) {
+            let b = oi(t);
+            return 'translate(' + arc.centroid(b) + ')rotate(' + computeTextRotation(b) + ')';
+        }
+        return tween;
+      }
+
+      function computeTextRotation(d) {
+          let angle = (d.x0 + d.x1) / Math.PI * 90;
+
+          // format text as spokes
+          return (angle < 180) ? angle - 90 : angle + 90;
+      }
+
+  // put labels in arcs
+  g.selectAll('.node')
+      .append('text')
+      .attr('transform', d =>  {
+          return 'translate(' + arc.centroid(d) + ')rotate(' + computeTextRotation(d) + ')'; })
+      .attr('dx', '-20')
+      .attr('dy', '.5em')
+      .text(d => { return d.parent ? d.data.name : '' });
+
+  // update function for sunburst
+  d3.select("#map")
+    .selectAll("path")
+    .on('click', function(d,i) {
+
+      // generate new object and root
+      let obj = childrenObject(trade[2017][d.id].trade);
+
+      // find data root and sorts arc based on observed value
+      let root = d3.hierarchy(obj)
+                    .sum(function (d) { return d.size; })
+                    .sort(function(a, b) { return b.value - a.value; })
+
+    d3.select("#sun").transition().duration(750)..exit()
+          .style("background", "red")
+        .transition()
+          .style("opacity", 0)
+          .remove();
+    });
 };
 
 function childrenObject(jsonObj, name){
+  // transform an object compatible to d3 hierarchy function
 
-  // make new object and keep track of keys in old object
-  var obj = {};
-  var count = 0;
+  // make new object and keep track of keys in current object
+  let obj = {};
+  let count = 0;
 
   // add object name
   obj['name'] = name;
 
   // iterate over keys in object
-  for (var key in jsonObj) {
+  for (let key in jsonObj) {
 
     // count key iterations
     count += 1;
@@ -95,17 +127,17 @@ function childrenObject(jsonObj, name){
     // add list to hold children for first iteration
     if (count == 1){
       obj['children'] = [];
-    }
+    };
 
     // generate child object
-    var children = {};
+    let children = {};
 
     // check if underlying key has value
     if (jsonObj[key]) {
 
       // check if this value is an object (values don't contain strings or arrays)
-      var c = 0;
-      for (var keys in jsonObj[key]) {
+      let c = 0;
+      for (let keys in jsonObj[key]) {
         c += 1;
         continue;
       }
@@ -129,7 +161,7 @@ function childrenObject(jsonObj, name){
         };
 
         obj['children'].push(children)
-      }
+      };
     }
 
     // else underlying value is missing, but bottom has been reached
@@ -141,11 +173,11 @@ function childrenObject(jsonObj, name){
         size: jsonObj[key]
       };
 
-      obj['children'].push(children)
+      obj['children'].push(children);
 
-    }
-  }
+    };
+  };
 
   // return finalised object
   return obj;
-}
+};

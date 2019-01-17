@@ -12,24 +12,38 @@
   <title>A trade view of Global Britain</title>
 </head>
     <body>
-
-    <!-- titles  -->
-    <h4>1045125 Jan Peters</h4>
+      <div style="background-color:rgba(204, 204, 204, 0.8);">
         <h1>Global Britain</h1>
+        <h4>1045125 Jan Peters</h4>
 
-    <!-- description  -->
-    <p>
-      Global Britain is the British Cabinet's slogan for its future trade policy.<br>
-      Yet how Global is Britain now? And what are the opportunities after Brexit? <br><br>
-      This project shows the development of Britain as a trade nation over the years 2000-2017, <br>
-      and displays its trade partners, the composition of trade flows and home production of these partners.
-    </p>
+        Global Britain is the British Cabinet's slogan for its future trade policy. <br>
+        Yet how Global is Britain now? And what are the opportunities after Brexit? <br> <br>
 
-    <h2>Year</h2>
-    <div class="row align-items-center">
-      <div class="col-sm-2"><p id="value-step"></p></div>
-      <div class="col-sm"><div id="slider-step"></div></div>
+        This project shows the development of Britain as a trade nation over the years 2000-2017, <br>
+        and displays its trade partners, the composition of trade flows and home production of these partners. <br>
+      </div>
+
+      <!-- create grid to hold svg -->
+    <div class="container">
+      <div class="row align-items-center">
+        <h2>Year</h2>
+        <div class="col-sm-2"><p id="value-step"></p></div>
+        <div class="col-sm"><div id="slider-step"></div></div>
+      </div>
+      <div class="row align-items-center">
+      <svg id="map"></svg>
     </div>
+     <div class="row">
+       <div class="row align-items-center">
+         <svg id="sun"></svg>
+       </div>
+     </div>
+   <div class="row">
+     <div class="row align-items-center">
+     <svg id="bar"></svg>
+    </div>
+   </div>
+   </div>
 
       <!-- sources for scripts  -->
       <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -41,8 +55,6 @@
       <script src="map.js"></script>
       <script src="sunburst.js"></script>
       <script src="barchart.js"></script>
-
-
 
 </body>
 </html>

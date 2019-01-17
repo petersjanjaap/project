@@ -1,10 +1,8 @@
 
-function mapGenerator(map, trade, year) {
+function mapGenerator(map, trade, countries, year) {
 
   // create SVG element for map
-  var svgMap = d3.select("body")
-                .append("svg")
-                .attr("class", "map")
+  let svgMap = d3.select("#map")
                 .attr("width", width)
                 .attr("height", height);
 
@@ -19,38 +17,37 @@ function mapGenerator(map, trade, year) {
         .text("World Map of trade");
 
   // Define the div for the tooltip
-  var tooltip = d3.select('body')
+  let tooltip = d3.select('body')
                 .append('div')
                 .attr('class', 'tooltip')
                 .style('opacity', 0);
 
-  // sources : http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
+  // source: http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
   //  https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
   // Map and projection
-  var path = d3.geoPath();
-
   // set map projection
-  var projection = d3.geoNaturalEarth()
+  let projection = d3.geoNaturalEarth()
                     .scale(width / 2 / Math.PI)
                     .translate([width / 2, height / 2])
 
   // generate projetion
-  var path = d3.geoPath()
+  let path = d3.geoPath()
                .projection(projection);
 
   // Data and mapColor scale
-  var data = d3.map();
+  let data = d3.map();
 
-  var mapCountries = [];
-  for (var i in map.features) {
+  let mapCountries = [];
+  for (let i in map.features) {
     mapCountries.push(map.features[i].id)
   }
 
   // find minimum and maximum export values with all partners
-  var min = 0;
-  var max = 0;
-  var maxcountry;
-  for (var country in trade[year]) {
+  let min = 0;
+  let max = 0;
+  let maxcountry;
+
+  for (let country in trade[year]) {
     if (trade[year].hasOwnProperty(country)) {
 
     // find minima and maxima of partners share in British export
@@ -65,7 +62,7 @@ function mapGenerator(map, trade, year) {
   }
 
   // mapColor for country
-  var mapColor = d3.scaleThreshold()
+  let mapColor = d3.scaleThreshold()
                 .domain(d3.range(min, max))
                 .range(d3.schemeBlues[9]);
 
@@ -77,7 +74,7 @@ function mapGenerator(map, trade, year) {
         .enter().append("path")
         .attr("d", path)
         .attr('id', d => { return d.id; })
-        .style("fill", function(d) {
+        .style("fill", d => {
           if (d.id == 'GBR') {
             return ("green")
           } else if (trade[year].hasOwnProperty(d.id)) {
@@ -101,7 +98,7 @@ function mapGenerator(map, trade, year) {
             .style('opacity', 0.9);
 
           // insert info tooltip
-          var info = toolInfo(d, trade[year])
+          let info = toolInfo(d, trade[year])
 
           tooltip
             .html(info)
@@ -126,20 +123,22 @@ function mapGenerator(map, trade, year) {
             .style('opacity', 0);
         })
         .on('click', d => {
+
           COUNTRY = d.id;
-          updateBars(trade[year][d.id].trade.xprt)
         });
 
 }
 
 // function to find info for tooltip
 function toolInfo(country, tradeYear) {
+  let name = country.properties.name;
+
   if (tradeYear.hasOwnProperty(country.id)) {
     if (tradeYear[country.id].share.xprt) {
-      console.log(country.id)
-      return country.id + ", " + Math.floor(tradeYear[country.id].share.xprt * 100) / 100 + "%"
-    }
+
+      return name + ", " + Math.floor(tradeYear[country.id].share.xprt * 100) / 100 + "%";
+    };
   } else {
-    return "Unknown"
-  }
-}
+    return name + "% unknown";
+  };
+};

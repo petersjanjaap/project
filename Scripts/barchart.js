@@ -1,53 +1,44 @@
-
-  // Define the div for the tooltip
-  var tooltip = d3.select('body')
-                .append('div')
-                .attr('class', 'tooltip')
-                .style('opacity', 0);
-
-// returns x and y observations for a given json object
-function fillXY(jsonObj){
-  var xAxis = [];
-  var yAxis = [];
-  for (var key in jsonObj) {
-    if (jsonObj.hasOwnProperty(key)) {
-
-      xAxis.push(key);
-
-      // add x and y observations for each key to lists
-      if (jsonObj[key]) {
-        yAxis.push(Math.round(parseFloat(jsonObj[key])));
-      } else {
-        yAxis.push(0)
-      }
-    }
-  }
-  return [xAxis, yAxis]
-}
-
 // calculates the ordinal scale for a discrete variable
 function ordinalScaling(variable) {
-  var ordinalRange = [];
-  for (var i = 0; i < variable.length + 1; i++) {
-    var coordinate = padding + i * width / variable.length
-    ordinalRange.push(coordinate)
-  }
+
+  // save info for scaling
+  let coordinates = [];
+  let length = variable.length;
+
+  // add coordinates to range
+  for (let i = 0; i <= length; i++) {
+    let coordinate = padding + i * (width - padding * 3) / length;
+    coordinates.push(coordinate);
+  };
+
+  // gen ordinal scaler
   ordinalScaler = d3.scaleOrdinal()
           .domain(variable)
-          .range(ordinalRange);
-  return ordinalScaler
+          .range(coordinates);
+
+  //  return scaler
+  return ordinalScaler;
 }
 
 // generates linear scale for variable
 function linearScaling(variable) {
-  linearScaler = d3.scaleLinear()
-         .domain([0, d3.max(variable, function(d) { return d; })])
-         .range([height, padding]);
-  return linearScaler
-}
+
+  // create linear scaling
+  let linearScaler = d3.scaleLinear()
+         .domain([0, d3.max(variable, d => { return d; })])
+         .range([height - padding, padding]);
+
+  return linearScaler;
+};
 
 // draws bars on an svg
 function barsGen(svg, obs, scaling){
+
+  // define tooltip
+  let tooltip = d3.select('body')
+                .append('div')
+                .attr('class', 'tooltip')
+                .style('opacity', 0);
 
   // generate bars
   svg.selectAll("rect")
@@ -55,13 +46,14 @@ function barsGen(svg, obs, scaling){
      .enter()
      .append("rect")
      .attr("class", "bar")
-     .attr("x", function(d, i) {
-        return padding * 2 + i * (width / obs.length);
+     .attr("x", (d, i) => {
+        return padding * 2 + i * (width - padding * 3) / obs.length;
      })
-     .attr("y", function(d) { return scaling(d); })
-     .attr("width", width / obs.length )
-     .attr("height", function(d) { return height - scaling(d); })
+     .attr("y", (d) => { return scaling(d); })
+     .attr("width", (width - padding * 4) / obs.length )
+     .attr("height", (d) => { return height - padding - scaling(d); })
      .style("fill", "darkblue")
+
      // source for tooltip: https://codepen.io/jackdbd/pen/NAEdBG
      .on('mouseover', d => {
 
@@ -70,12 +62,13 @@ function barsGen(svg, obs, scaling){
          .transition()
          .duration(200)
          .style('opacity', 0.9);
-
+          console.log(d)
        // insert info tooltip
        tooltip
          .html("$" + d.toLocaleString())
          .style('left', d3.event.pageX + 'px')
          .style('top', d3.event.pageY - 28 + 'px');
+
      })
      .on('mouseout', d => {
        tooltip
@@ -83,38 +76,37 @@ function barsGen(svg, obs, scaling){
          .duration(500)
          .style('opacity', 0);
      });
-}
+};
+
 function barChartGenerator(data, id) {
 
     // create SVG element for bars
-    var svgBar = d3.select("body")
-                .append("svg")
+    let svgBar = d3.select("#bar")
                 .attr("class", "bar")
                 .attr("width", width)
                 .attr("height", height);
 
-     // load data on sectors (x) and trade (y) variables
-     axes = fillXY(data);
-     sectors = axes[0];
-     values = axes[1];
+     // get sectors and respective observations
+     let sectors = Object.getOwnPropertyNames(data);
+     let obs = Object.values(data);
 
      // obtains ordinale scale for country on x axis using function
-     xScale = ordinalScaling(sectors)
+     let xScale = ordinalScaling(sectors);
 
      // obtains linear scale for gdp
-     yScale = linearScaling(values)
+     let yScale = linearScaling(obs);
 
      // draw bars on sgv using yScale
-     barsGen(svgBar, values, yScale);
+     barsGen(svgBar, obs, yScale);
 
-     // draw y 'test'
+     // draw y axis
      svgBar.append("g")
            .attr("transform", "translate(" + padding * 2 + ", 0)")
-           .call(d3.axisLeft(yScale))
+           .call(d3.axisLeft(yScale));
 
     // draw x axis
     svgBar.append("g")
-       .attr("transform", "translate(" + padding + "," + height + ")")
+       .attr("transform", "translate(" + padding + "," + (height - padding) + ")")
        .call(d3.axisBottom(xScale)
                 .tickSize(10))
 
@@ -130,8 +122,9 @@ function barChartGenerator(data, id) {
     svgBar.append("text")
        .attr("class", "label")
        .attr("x", width / 2 )
-       .attr("y", height - padding )
-       .text("Components of trade with" + id);
+       .attr("y", height - padding / 5)
+       .text("Components of trade with " + id);
+
 
     // add label to y axis
     svgBar.append("text")
@@ -148,22 +141,3 @@ function barChartGenerator(data, id) {
        .style("text-anchor", "middle")
        .text("$ of trade in sector $");
 };
-
-// source: https://bl.ocks.org/tillg/14a9b1a363e82223c764551e977405f5
-function updateBars(svg, data) {
-  var t = d3.transition()
-      .duration(750);
-  var svg = d3.select("#bar")
-  console.log(svg)
-  var bar = svg.selectAll("g")
-    .data((data, d => d.id))
-
-  // EXIT section
-  bar
-    .exit()
-      .remove();
-
-  bar.select("rect")
-    .transition(t)
-      .attr("height", height);
-}
