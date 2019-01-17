@@ -28,3 +28,9 @@
 - splitted code into seperate files for all visualizations
 - started working on updates through slider and map click function
 - minor adjustments to css sheet
+
+#day 9
+- started organizing elements on page using bootstrap grids
+- sorted slices in pie charts based on elements' underlying values
+- started working on updates by clicking on countries on map
+- prepared alpha version
