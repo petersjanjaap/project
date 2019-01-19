@@ -1,112 +1,130 @@
-let radius = Math.min(width, height) / 2 - padding;
-let color = d3.scaleOrdinal(d3.schemeBlues[9]);
+// source: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 
-
-function sunBurstGenerator(trade, data) {
-
-  // format data and obtain vars
-  let obj = childrenObject(data, "DEU");
-  let radius = Math.min(width, height) / 2 - padding;
-  let color = d3.scaleOrdinal(d3.schemeBlues[9]);
-
-  // create primary g element
-  let g = d3.select('#sun')
-    .attr('width', height)
+// Size our <svg> element, add a <g> element, and move translate 0,0 to the center of the element.
+const g = d3.select('#sun')
+    .attr('width', width)
     .attr('height', height)
     .append('g')
-    .attr('transform', 'translate(' + height / 2 + ',' + height / 2 + ')');
+    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-  // data strucure
-  let partition = d3.partition()
-      .size([2 * Math.PI, radius]);
+const radius = Math.min(width, height) / 2 - padding;
 
-  // find data root and sorts arc based on observed value
-  let root = d3.hierarchy(obj)
-                .sum(function (d) { return d.size; })
-                .sort(function(a, b) { return b.value - a.value; });
+// Create our sunburst data structure and size it.
+const partition = d3.partition()
+    .size([2 * Math.PI, radius]);
 
-  // size arcs
+const color = d3.scaleOrdinal(d3.schemeCategory10 );;
+
+//
+function sunBurstGenerator(obj) {
+  // transform obj to readable data for hierarchy function
+  let data = childrenObject(obj);
+
+
+  // Find the root node, calculate the node.value, and sort our nodes by node.value
+  root = d3.hierarchy(data)
+      .sum(function (d) { return d.size; })
+      .sort(function (a, b) { return b.value - a.value; });
+
+  // Calculate the size of each arc; save the initial angles for tweening.
   partition(root);
+  arc = d3.arc()
+      .startAngle(function (d) { d.x0s = d.x0; return d.x0; })
+      .endAngle(function (d) { d.x1s = d.x1; return d.x1; })
+      .innerRadius(function (d) { return d.y0; })
+      .outerRadius(function (d) { return d.y1; });
 
-  var arc = d3.arc()
-              .startAngle(d => { return d.x0; })
-              .endAngle(d => { return d.x1; })
-              .innerRadius(d => { return d.y0; })
-              .outerRadius(d => { return d.y1; });
+  // Add a <g> element for each node; create the slice variable since we'll refer to this selection many times
+  slice = g.selectAll('g.node').data(root.descendants(), function(d) { return d.data.name; });
+  newSlice = slice.enter().append('g').attr("class", "node").merge(slice);
+  slice.exit().remove();
 
-  // generate slice variable
-  var slice = g.selectAll('g')
-    .data(root.descendants())
-    .enter().append('g').attr('class', 'node');
+  // Append <path> elements and draw lines based on the arc calculations. Last, color the lines and the slices.
+  slice.selectAll('path').remove();
 
-    slice.append('path').attr('display', function (d) { return d.depth ? null : 'none'; })
-      .attr('d', arc)
+  newSlice.append('path').attr("display", function (d) { return d.depth ? null : "none"; })
+      .attr("d", arc)
       .style('stroke', '#fff')
-      .style('fill', function (d) { return color((d.children ? d : d.parent).data.name); });
+      .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
 
-      // source: https://bl.ocks.org/denjn5/e1cdbbe586ac31747b4a304f8f86efa5
-      function arcTweenPath(a, i) {
+  // Populate the <text> elements with our data-driven titles.
+  slice.selectAll('text').remove();
+  newSlice.append("text")
+      .attr("transform", function(d) {
+          return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
+      .attr("dx", "-20")
+      .attr("dy", ".5em")
+      .text(function(d) { return d.parent ? d.data.name : "" });
 
-        let oi = d3.interpolate({ x0: a.x0s, x1: a.x1s }, a);
-
-        function tween(t) {
-          let b = oi(t);
-          a.x0s = b.x0;
-          a.x1s = b.x1;
-          return arc(b);
-        }
-        return tween;
-      }
-
-
-      // when switching data: interpolate the text centroids and rotation.
-
-      function arcTweenText(a, i) {
-
-        let oi = d3.interpolate({ x0: a.x0s, x1: a.x1s }, a);
-        function tween(t) {
-            let b = oi(t);
-            return 'translate(' + arc.centroid(b) + ')rotate(' + computeTextRotation(b) + ')';
-        }
-        return tween;
-      }
-
-      function computeTextRotation(d) {
-          let angle = (d.x0 + d.x1) / Math.PI * 90;
-
-          // format text as spokes
-          return (angle < 180) ? angle - 90 : angle + 90;
-      }
-
-  // put labels in arcs
-  g.selectAll('.node')
-      .append('text')
-      .attr('transform', d =>  {
-          return 'translate(' + arc.centroid(d) + ')rotate(' + computeTextRotation(d) + ')'; })
-      .attr('dx', '-20')
-      .attr('dy', '.5em')
-      .text(d => { return d.parent ? d.data.name : '' });
-
-  // update function for sunburst
-  d3.select("#map")
-    .selectAll("path")
-    .on('click', function(d,i) {
-
-      // generate new object and root
-      let obj = childrenObject(trade[2017][d.id].trade);
-
-      // find data root and sorts arc based on observed value
-      let root = d3.hierarchy(obj)
-                    .sum(function (d) { return d.size; })
-                    .sort(function(a, b) { return b.value - a.value; })
-
-    d3.select("#sun").transition().duration(750)..exit()
-          .style("background", "red")
-        .transition()
-          .style("opacity", 0)
-          .remove();
-    });
+  newSlice.on("click", highlightSelectedSlice);
 };
+
+
+// Redraw the Sunburst Based on User Input
+function highlightSelectedSlice(c,i) {
+
+    clicked = c;
+    var rootPath = clicked.path(root).reverse();
+    rootPath.shift(); // remove root node from the array
+
+    newSlice.style("opacity", 0.4);
+    newSlice.filter(function(d) {
+        if (d === clicked && d.prevClicked) {
+            d.prevClicked = false;
+            newSlice.style("opacity", 1);
+            return true;
+
+        } else if (d === clicked) {
+            d.prevClicked = true;
+            return true;
+        } else {
+            d.prevClicked = false;
+            return (rootPath.indexOf(d) >= 0);
+        }
+    })
+        .style("opacity", 1);
+
+    d3.select("#sidebar").text("another!");
+
+};
+
+function arcTweenPath(a, i) {
+
+    var oi = d3.interpolate({ x0: a.x0s, x1: a.x1s }, a);
+
+    function tween(t) {
+        var b = oi(t);
+        a.x0s = b.x0;
+        a.x1s = b.x1;
+        return arc(b);
+    }
+
+    return tween;
+}
+
+/**
+ * When switching data: interpolate the text centroids and rotation.
+ */
+function arcTweenText(a, i) {
+
+    var oi = d3.interpolate({ x0: a.x0s, x1: a.x1s }, a);
+    function tween(t) {
+        var b = oi(t);
+        return "translate(" + arc.centroid(b) + ")rotate(" + computeTextRotation(b) + ")";
+    }
+    return tween;
+}
+
+/**
+ * Calculate the correct distance to rotate each label based on its location in the sunburst.
+ */
+function computeTextRotation(d) {
+    var angle = (d.x0 + d.x1) / Math.PI * 90;
+
+    // Avoid upside-down labels
+    // return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
+    return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
+}
 
 function childrenObject(jsonObj, name){
   // transform an object compatible to d3 hierarchy function

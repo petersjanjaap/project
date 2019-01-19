@@ -8,13 +8,12 @@ function mapGenerator(map, trade, countries, year) {
 
   // creates a title
   svgMap.append("text")
-        .attr("class", "Map")
         .attr("x", (width / 2))
-        .attr("y", padding * 0.4)
+        .attr("y", padding)
         .attr("text-anchor", "middle")
         .attr("fill", "black")
         .style("font-size", "34px")
-        .text("World Map of trade");
+        .text("Partner share of trade with the UK");
 
   // Define the div for the tooltip
   let tooltip = d3.select('body')

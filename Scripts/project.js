@@ -1,6 +1,6 @@
 // width, height and padding for svgs
-const width = screen.width / 1.3;
-const height = screen.height / 1.5;
+const width = 800;
+const height = 600;
 const padding = 60;
 
 // global year
@@ -17,7 +17,7 @@ for (let year = 2000; year < 2018; year++) {
 let sliderStep = d3.sliderBottom()
                     .min(Math.min(...years))
                     .max(Math.max(...years))
-                    .width(width)
+                    .width(width * 0.9)
                     .ticks(years.length)
                     .step(1)
                     .default(0.015)
@@ -25,20 +25,28 @@ let sliderStep = d3.sliderBottom()
 
                       // update year based on user selection
                       YEAR = d;
+                      barChartGenerator(trade[YEAR][COUNTRY].trade.xprt, countries[COUNTRY]);
+                      sunBurstGenerator(trade[YEAR][COUNTRY].trade)
                       d3.select('p#value-step').text(d);
                     });
 
-let gStep = d3.select('div#slider-step')
-              .append('svg')
-              .attr("class", "sliderf")
+let slider = d3.select('#slider')
+              .attr("class", "slider")
               .attr('width', width)
-              .attr('height', 100)
-              .append('g')
-              .attr('transform', 'translate(30,30)');
+              .attr('height', 150);
+
+let gStep =   slider.append('g')
+                    .attr('transform', 'translate(30,70)');
+
+slider.append("text")
+      .attr("x", (width / 2))
+      .attr("y", padding)
+      .attr("text-anchor", "middle")
+      .attr("fill", "black")
+      .style("font-size", "34px")
+      .text("Select year from slider");
 
 gStep.call(sliderStep);
-
-d3.select('p#value-step').text(sliderStep.value());
 
 // obtain datasets
 let trade = d3.json("dataset.json");
@@ -60,10 +68,18 @@ Promise.all(promises).then(response => {
   // generate map
   mapGenerator(map, trade, countries, YEAR);
 
+  // generate sun burst
+  sunBurstGenerator(trade[YEAR][COUNTRY].trade);
+
   // generate bar chart
   barChartGenerator(trade[YEAR][COUNTRY].trade.xprt, countries[COUNTRY]);
 
-  // generate sun burst
-  sunBurstGenerator(trade, trade[YEAR][COUNTRY].trade);
-
+  // update function for sunburst
+  d3.select('#map')
+    .selectAll('path')
+    .on('click', function(d,i) {
+      COUNTRY = d.id
+      barChartGenerator(trade[YEAR][COUNTRY].trade.xprt, countries[COUNTRY]);
+      sunBurstGenerator(trade[YEAR][COUNTRY].trade)
+    });
 });
