@@ -34,3 +34,8 @@
 - sorted slices in pie charts based on elements' underlying values
 - started working on updates by clicking on countries on map
 - prepared alpha version
+
+#day 10
+- implemented interactivity in sunburst, updates automatically by selecting year or country
+- sunburst elements can now be selected and will be highlighted
+- implemented interactivity into bar chart. used new source to create cleaner code
