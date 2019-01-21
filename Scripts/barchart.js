@@ -1,71 +1,86 @@
-// source: https://bl.ocks.org/tillg/14a9b1a363e82223c764551e977405f5
-
 const svgBar = d3.select("#bar")
                   .attr("width", width)
                   .attr("height", height)
                   .append("g");
-const BAR_WIDTH = 50;
-const BAR_GAP = padding / 10;
+
+let duration = 1000;
+
+svgBar.append('g')
+    .attr('transform', 'translate(0, ' + (height - padding) + ')')
+    .attr('class', 'x axis');
+
+// draw y axis
+yAxis = svgBar.append("g")
+       .attr("class", "y axis")
+       .attr("transform", "translate(" + padding + ", 0)")
+
+
+// calculates the ordinal scale for a discrete variable
+function ordinalScaling(variable) {
+  let ordinalRange = [];
+  let length = variable.length;
+  for (let i = 0; i < length + 1; i++) {
+    let coordinate =  padding + i * (width - padding * 2) / length;
+    ordinalRange.push(coordinate);
+  };
+  ordinalScaler = d3.scaleOrdinal()
+          .domain(variable)
+          .range(ordinalRange);
+  return ordinalScaler;
+};
+
 
 function barChartGenerator(data) {
 
-  let obs = Object.values(data);
-  // generate scale for bar chart
-  let scale = d3.scaleLinear()
-                  .domain([0, d3.max(obs)])
-                  .range([0, height - padding]);
-  const t = d3.transition()
-      .duration(750);
+    // obtain data
+    let obs = Object.values(data);
+    let sectors = Object.keys(data);
 
-  const bar = svgBar.selectAll("g")
-    .data(obs);
+    //  get scalers
+    let yScale = d3.scaleLinear()
+        .range([height - padding, 0 + padding])
+        .domain([0, d3.max(obs)]);
 
-  // EXIT section
-  bar
-    .exit()
-      .remove();
+    yAxis.transition().duration(750).call(d3.axisLeft(yScale));
+    let xScale = ordinalScaling(sectors);
 
-  // UPDATE section
-  bar
-    .transition(t)
-      .attr("transform", (d, i) => { return `translate(${i * (BAR_WIDTH + BAR_GAP)},${height - scale(d)})`});
+    let xAxis = d3.axisBottom(xScale);
+    let bars = svgBar.selectAll(".bar")
+        .data(obs);
 
-  bar.select("rect")
-    .transition(t)
-      .attr("height", height);
+    bars
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr("fill", "darkblue")
+        .attr('width', (width - padding * 2) / obs.length)
+        .attr('height', 0)
+        .attr('y', height)
+        .merge(bars)
+        .transition()
+        .duration(duration)
+        .attr("height", function(d, i) {
+            return height - padding - yScale(d);
+        })
+        .attr("y", function(d, i) {
+            return yScale(d);
+        })
+        .attr("width", (width - padding * 3) / obs.length)
+        .attr("x", function(d, i) {
+           return padding + i * ((width - padding * 2)  / obs.length);
+        })
 
-  bar.select("text")
-    .transition(t)
-      .tween("text", function(d) {
-        const v0 = this.textContent || "0";
-        const v1 = d;
-        const i = d3.interpolateRound(v0, v1);
-        return t => this.textContent = i(t);
-      });
+    bars
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr('height', 0)
+        .attr('y', height)
+        .remove();
 
-  // ENTER section
-  const barEnter = bar
-    .enter().append("g")
-      .attr("transform", (d, i) => {`translate(${i * (BAR_WIDTH + BAR_GAP)},${height - padding})`});
-
-  barEnter
-    .transition(t)
-      .attr("transform", (d, i) => {`translate(${i * (BAR_WIDTH + BAR_GAP)},${height - scale(d)})`});
-
-  const rect = barEnter.append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", BAR_WIDTH)
-      .attr("height", 0);
-
-  rect
-    .transition(t)
-      .attr("height", height);
-
-  const text = barEnter.append("text")
-      .text(d => d)
-      .attr("text-anchor", "middle")
-      .attr("dx", BAR_WIDTH / 2)
-      .attr("dy", -2);
+    svgBar.select('.x.axis')
+        .transition()
+        .duration(duration)
+        .call(xAxis);
 
 };

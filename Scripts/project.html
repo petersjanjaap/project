@@ -22,26 +22,27 @@
         This project shows the development of Britain as a trade nation over the years 2000-2017, <br>
         and displays its trade partners, the composition of trade flows and home production of these partners. <br>
       </div>
+      <div class="container-fluid">
+      <h1>Grid</h1>
+      <svg id="slider"></svg>
+      <div class="row">
+        <div class="col-sm-6">
+          <svg id="map"></svg>
+          </div>
+        <div class="col-sm-6">
+          <svg id="sun"></svg>
+        </div>
+    </div>
 
-      <!-- create grid to hold svg -->
-    <div class="container">
-      <div class="row align-items-center">
-        <svg id="slider"></svg>
-      </div>
-      <div class="row align-items-center">
-      <svg id="map"></svg>
+    <div class="row">
+      <div class="col-sm-6">
+        <svg id="bar"></svg>
     </div>
-     <div class="row">
-       <div class="row align-items-center">
-         <svg id="sun"></svg>
-       </div>
-     </div>
-   <div class="row">
-     <div class="row align-items-center">
-     <svg id="bar"></svg>
+      <div class="col-sm-6">
+
     </div>
-   </div>
-   </div>
+  </div>
+    </div>
 
       <!-- sources for scripts  -->
       <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -49,6 +50,7 @@
       <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
       <script src="https://unpkg.com/d3-simple-slider/build/d3-simple-slider.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+      <script type="text/javascript" src="https://d3js.org/colorbrewer.v1.min.js"></script>
       <script src="project.js"></script>
       <script src="map.js"></script>
       <script src="sunburst.js"></script>

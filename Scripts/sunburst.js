@@ -13,13 +13,12 @@ const radius = Math.min(width, height) / 2 - padding;
 const partition = d3.partition()
     .size([2 * Math.PI, radius]);
 
-const color = d3.scaleOrdinal(d3.schemeCategory10 );;
+const color = d3.scaleOrdinal(colorbrewer.YlGnBu[5] );;
 
-//
 function sunBurstGenerator(obj) {
+
   // transform obj to readable data for hierarchy function
   let data = childrenObject(obj);
-
 
   // Find the root node, calculate the node.value, and sort our nodes by node.value
   root = d3.hierarchy(data)
@@ -40,22 +39,37 @@ function sunBurstGenerator(obj) {
   slice.exit().remove();
 
   // Append <path> elements and draw lines based on the arc calculations. Last, color the lines and the slices.
-  slice.selectAll('path').remove();
+
+  d3.select('#sun').selectAll('path').remove();
 
   newSlice.append('path').attr("display", function (d) { return d.depth ? null : "none"; })
       .attr("d", arc)
+      .style("fill", "white")
+      .transition()
+      .duration(750)
       .style('stroke', '#fff')
       .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
 
   // Populate the <text> elements with our data-driven titles.
-  slice.selectAll('text').remove();
+  slice.selectAll('text')
+  .remove();
+
   newSlice.append("text")
+  .style("fill", "white")
+  .transition()
+  .duration(750)
       .attr("transform", function(d) {
           return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
       .attr("dx", "-20")
       .attr("dy", ".5em")
-      .text(function(d) { return d.parent ? d.data.name : "" });
+      .style("fill", "white")
+      .text(d => {
 
+        // only display text if space available
+        if (d.value / root.value > 0.01){
+          return (d.parent ? d.data.name : "")
+        };
+      })
   newSlice.on("click", highlightSelectedSlice);
 };
 
@@ -136,9 +150,11 @@ function childrenObject(jsonObj, name){
   // add object name
   obj['name'] = name;
 
-  // iterate over keys in object
+  // iterate over keys in object except total components
   for (let key in jsonObj) {
-
+    if (key == "Total") {
+      continue;
+    }
     // count key iterations
     count += 1;
 

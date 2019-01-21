@@ -122,8 +122,8 @@ def load_data(link, year, type):
             country_dict(year, country)
 
             # add missing entries
-            DATA[year][country]['share']['mprt'] = None
-            DATA[year][country]['share']['xprt'] = None
+            DATA[year][country]['share']['mprt'] = 0
+            DATA[year][country]['share']['xprt'] = 0
 
         # sectors are only available for trade dataset
         if type == 'trade':
@@ -167,6 +167,11 @@ def load_GDP():
     gdp_vars = ['NV.IND.MANF.ZS', 'NV.AGR.TOTL.ZS', 'NY.GDP.PETR.RT.ZS',
                 'NY.GDP.COAL.RT.ZS', 'NY.GDP.MINR.RT.ZS', 'NV.SRV.TOTL.ZS',
                 'NE.TRD.GNFS.ZS']
+    var_names = ['Manufacturing', 'Agriculture', 'Oil', 'Coal', 'Mining',
+                 'Services', 'Trade']
+    gdp_dict = {}
+    for i in range(len(gdp_vars)):
+        gdp_dict[gdp_vars[i]] = var_names[i]
 
     # join indicators and include semicolon
     indics = ';'.join(gdp_vars)
@@ -182,7 +187,7 @@ def load_GDP():
 
             # add entries for all sectors
             for gdp_var in gdp_vars:
-                GDP[country][year][gdp_var] = None
+                GDP[country][year][gdp_dict[gdp_var]] = 0
 
     # get link for country from api for data on all vars for 2000-2017
     link = f'http://api.worldbank.org/v2/country/all/indicator/{indics}?source=2&format=json&date=2000:2017'
@@ -227,7 +232,7 @@ def load_GDP():
                         obs = float(obs)
 
                     # add info to dictionary
-                    GDP[ccode][year][gdp_var] = obs
+                    GDP[ccode][year][gdp_dict[gdp_var]] = obs
 
 
 def json_save(dictionary, save_title):
