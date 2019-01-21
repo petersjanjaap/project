@@ -39,3 +39,10 @@
 - implemented interactivity in sunburst, updates automatically by selecting year or country
 - sunburst elements can now be selected and will be highlighted
 - implemented interactivity into bar chart. used new source to create cleaner code
+
+#day 11
+- after some struggles got bootstrap grids working
+- colors on map update after selecting new year
+- made an interactive flashing sunburst
+- bar chart now displays GDP components of partner country: This still needs to list the total value of GDP somewhere in the SVG.
+- started working on better layout
