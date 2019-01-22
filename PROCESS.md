@@ -46,3 +46,9 @@
 - made an interactive flashing sunburst
 - bar chart now displays GDP components of partner country: This still needs to list the total value of GDP somewhere in the SVG.
 - started working on better layout
+
+#day 12
+- inserted legend into map svg
+- added drop down menu to switch display between export and import relations
+- used new color elements for charts
+- tried different styling methods for page layout
