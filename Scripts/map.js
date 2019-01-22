@@ -1,8 +1,10 @@
 // create SVG element for map
 let svgMap = d3.select("#map")
               .attr("width", width)
-              .attr("height", height);
-
+              .attr("height", height)
+              .append("g")
+              .attr("class","dropdown");
+              
 // creates a title
 svgMap.append("text")
       .attr("x", (width / 2))
@@ -10,7 +12,7 @@ svgMap.append("text")
       .attr("text-anchor", "middle")
       .attr("fill", "black")
       .style("font-size", "34px")
-      .text("Partner share of trade with the UK");
+      .text("Country share of UK export in %");
 
 function mapGenerator(map, trade, countries, year) {
 
@@ -90,10 +92,23 @@ function updateMap(data, map) {
   let min = range[0];
   let max = range[1];
 
+  // determine colorDomain
+  let colorDomain = [];
+  for (let i = 0; i < 10; i++) {
+    let element = ((i * max) / 10);
+    if (i == 0) {
+      element = 0.1;
+    };
+    colorDomain.push(element / 100)
+  }
+
   // mapColor for country
   let mapColor  = d3.scaleThreshold()
                      .range(colorbrewer.YlGnBu[9])
-                     .domain(d3.range(min, max));
+                     .domain(colorDomain);
+
+  // create legend
+  column("d3.scaleThreshold", mapColor);
 
   svgMap.selectAll("path").
   style("fill", d => {
@@ -101,7 +116,7 @@ function updateMap(data, map) {
       return mapColor(0)
     } else if (data.hasOwnProperty(d.id)) {
       if (data[d.id].share.hasOwnProperty('xprt')){
-        return mapColor(data[d.id].share.xprt);
+        return mapColor(data[d.id].share.xprt / 100);
       } else {
         return "grey"
       }
@@ -134,7 +149,7 @@ function updateMap(data, map) {
         return mapColor(0)
       } else if (data.hasOwnProperty(d.id)) {
         if (data[d.id].share.hasOwnProperty('xprt')){
-          return mapColor(data[d.id].share.xprt);
+          return mapColor(data[d.id].share.xprt / 100);
         } else {
           return "grey"
         }
@@ -160,4 +175,19 @@ function updateMap(data, map) {
         .style('top', d3.event.pageY - 28 + 'px');
     }
   });
+};
+
+function column(title, scale) {
+  var legend = d3.legendColor()
+    .labelFormat(d3.format(".2f"))
+    .labels(d3.legendHelpers.thresholdLabels)
+    .cells(10)
+    .scale(scale);
+
+  svgMap.append("g")
+    .attr("class", "legend")
+    .attr("transform", "translate(5 , " + height / 4 + ")");
+
+  svgMap.select(".legend")
+    .call(legend);
 };
