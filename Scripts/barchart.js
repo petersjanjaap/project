@@ -56,6 +56,24 @@ function barChartGenerator(data) {
         .attr('width', (width - padding * 2) / obs.length)
         .attr('height', 0)
         .attr('y', height)
+        .on('mouseover', d => {
+          // make tooltip
+          tooltip
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+
+          tooltip
+            .html("$"+ Math.round(d) +" ")
+            .style('left', d3.event.pageX + 'px')
+            .style('top', d3.event.pageY - 28 + 'px');
+        })
+        .on('mouseout', d => {
+          tooltip
+            .transition()
+            .duration(500)
+            .style('opacity', 0);
+        })
         .merge(bars)
         .transition()
         .duration(duration)
@@ -82,5 +100,4 @@ function barChartGenerator(data) {
         .transition()
         .duration(duration)
         .call(xAxis);
-
 };

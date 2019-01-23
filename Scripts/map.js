@@ -1,18 +1,7 @@
 // create SVG element for map
-let svgMap = d3.select("#map")
-              .attr("width", width)
-              .attr("height", height)
-              .append("g")
-              .attr("class","dropdown");
-              
-// creates a title
-svgMap.append("text")
-      .attr("x", (width / 2))
-      .attr("y", padding)
-      .attr("text-anchor", "middle")
-      .attr("fill", "black")
-      .style("font-size", "34px")
-      .text("Country share of UK export in %");
+let svgMap = d3.select('#map')
+              .attr('width', width * 1.4)
+              .attr('height', height * 1.4)
 
 function mapGenerator(map, trade, countries, year) {
 
@@ -21,8 +10,8 @@ function mapGenerator(map, trade, countries, year) {
   // Map and projection
   // set map projection
   let projection = d3.geoNaturalEarth()
-                    .scale(width / 2 / Math.PI)
-                    .translate([width / 2, height / 2])
+                    .scale(width / 1.25 / Math.PI)
+                    .translate([width / 1.4, height / 1.4])
 
   // generate projetion
   let path = d3.geoPath()
@@ -32,12 +21,12 @@ function mapGenerator(map, trade, countries, year) {
   let data = d3.map();
 
   // Draw the map
-  svgMap.append("g")
-        .attr("class", "countries")
-        .selectAll("path")
+  svgMap.append('g')
+        .attr('class', 'countries')
+        .selectAll('path')
         .data(map.features)
-        .enter().append("path")
-        .attr("d", path)
+        .enter().append('path')
+        .attr('d', path)
         .attr('id', d => { return d.id; })
 
   // do map coloring
@@ -46,15 +35,25 @@ function mapGenerator(map, trade, countries, year) {
 
 // function to find info for tooltip
 function toolInfo(country, tradeYear) {
-  let name = country.properties.name;
+  if (country.hasOwnProperty('properties')) {
+    if (country.properties.hasOwnProperty('name')) {
+      let name = country.properties.name;
 
-  if (tradeYear.hasOwnProperty(country.id)) {
-    if (tradeYear[country.id].share.hasOwnProperty('xprt')) {
+      if (tradeYear.hasOwnProperty(country.id)) {
+        if (tradeYear[country.id].share.hasOwnProperty([TRADE_FLOW])) {
 
-      return name + ", " + Math.floor(tradeYear[country.id].share.xprt * 100) / 100 + "%";
-    };
+          return name + ', ' + Math.floor(tradeYear[country.id].share[TRADE_FLOW] * 100) / 100 + '%';
+        };
+      }
+      else {
+          return name + '% unknown';
+      };
   } else {
-    return name + "% unknown";
+    return 'No info available';
+  };
+
+  } else {
+    return 'No info available';
   };
 };
 
@@ -68,11 +67,11 @@ function minMax (data, mapCountries) {
     if (data.hasOwnProperty(country)) {
 
     // find minima and maxima of partners share in British export
-      if (data[country].share.xprt < min) {
-        min = data[country].share.xprt;
-      } else if (data[country].share.xprt > max)  {
+      if (data[country].share[TRADE_FLOW] < min) {
+        min = data[country].share[TRADE_FLOW];
+      } else if (data[country].share[TRADE_FLOW] > max)  {
         if (mapCountries.indexOf(country) >= 0 ) {
-            max = data[country].share.xprt;
+            max = data[country].share[TRADE_FLOW];
         };
       };
     };
@@ -81,6 +80,23 @@ function minMax (data, mapCountries) {
 };
 
 function updateMap(data, map) {
+
+  // creates a title
+  svgMap.select('.title').remove()
+  let flow;
+  if (TRADE_FLOW === 'xprt') {
+    flow = 'Export';
+  } else {
+    flow = 'Import';
+  };
+  svgMap.append('text')
+        .attr('class', 'title')
+        .attr('x', (width * 1.4 / 2))
+        .attr('y', 30)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'black')
+        .style('font-size', '34px')
+        .text('Country share of UK ' + flow + ' in %');
 
   let mapCountries = [];
   for (let i in map.features) {
@@ -94,41 +110,47 @@ function updateMap(data, map) {
 
   // determine colorDomain
   let colorDomain = [];
-  for (let i = 0; i < 10; i++) {
-    let element = ((i * max) / 10);
+  for (let i = 0; i < 9; i++) {
+    let element = ((i * max) / 8);
     if (i == 0) {
       element = 0.1;
     };
     colorDomain.push(element / 100)
   }
-
   // mapColor for country
-  let mapColor  = d3.scaleThreshold()
-                     .range(colorbrewer.YlGnBu[9])
+  let colorScheme;
+  if (TRADE_FLOW === 'xprt') {
+    colorScheme = colorbrewer.YlGnBu[9];
+  } else {
+    colorScheme = colorbrewer.YlOrBr[9];
+  }
+
+  let mapColor = d3.scaleThreshold()
+                     .range(colorScheme)
                      .domain(colorDomain);
 
   // create legend
-  column("d3.scaleThreshold", mapColor);
+  column('d3.scaleThreshold', mapColor);
 
-  svgMap.selectAll("path").
-  style("fill", d => {
+  svgMap.selectAll('path').
+  style('fill', d => {
     if (d.id == 'GBR') {
       return mapColor(0)
     } else if (data.hasOwnProperty(d.id)) {
-      if (data[d.id].share.hasOwnProperty('xprt')){
-        return mapColor(data[d.id].share.xprt / 100);
+      if (data[d.id].share.hasOwnProperty([TRADE_FLOW])){
+        return mapColor(data[d.id].share[TRADE_FLOW] / 100);
       } else {
-        return "grey"
+        return 'grey'
       }
     } else {
-      return "grey"
+      return 'grey'
     };
   })
   .style('stroke', 'black')
   .style('stroke-width', 1.5)
-  .style("opacity",0.8)
+  .style('opacity',0.8)
   .on('mouseover', d => {
-    d3.select("#" + d.id).style("fill", "red")
+    d3.select('#' + d.id).style('fill', 'red')
 
     // make tooltip
     tooltip
@@ -144,17 +166,17 @@ function updateMap(data, map) {
       .style('top', d3.event.pageY - 28 + 'px');
   })
   .on('mouseout', d => {
-    d3.select("#" + d.id).style("fill", d => {
+    d3.select('#' + d.id).style('fill', d => {
       if (d.id == 'GBR') {
         return mapColor(0)
       } else if (data.hasOwnProperty(d.id)) {
-        if (data[d.id].share.hasOwnProperty('xprt')){
-          return mapColor(data[d.id].share.xprt / 100);
+        if (data[d.id].share.hasOwnProperty([TRADE_FLOW])){
+          return mapColor(data[d.id].share[TRADE_FLOW] / 100);
         } else {
-          return "grey"
+          return 'grey'
         }
       } else {
-        return "grey"
+        return 'grey'
       };
     })
     tooltip
@@ -170,7 +192,7 @@ function updateMap(data, map) {
       sunBurstGenerator(TRADE[YEAR][COUNTRY].trade)
     } else {
       tooltip
-        .html("Oops, no info available")
+        .html('Oops, no info available')
         .style('left', d3.event.pageX + 'px')
         .style('top', d3.event.pageY - 28 + 'px');
     }
@@ -178,16 +200,19 @@ function updateMap(data, map) {
 };
 
 function column(title, scale) {
-  var legend = d3.legendColor()
-    .labelFormat(d3.format(".2f"))
-    .labels(d3.legendHelpers.thresholdLabels)
-    .cells(10)
-    .scale(scale);
+  svgMap.select('.legend').remove()
 
-  svgMap.append("g")
-    .attr("class", "legend")
-    .attr("transform", "translate(5 , " + height / 4 + ")");
+  let legend = d3.legendColor()
+          .labelFormat(d3.format('.2f'))
+          .labels(d3.legendHelpers.thresholdLabels)
+          .cells(10)
+          .scale(scale);
 
-  svgMap.select(".legend")
+  svgMap.append('g')
+    .attr('class', 'legend')
+    .attr('transform', 'translate(5 , ' + height / 4 + ')');
+
+  svgMap.select('.legend')
     .call(legend);
+
 };

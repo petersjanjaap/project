@@ -1,14 +1,17 @@
+
 body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
 };
-p {
-  /* rgba used for background opacity */
-  background: rgba(191, 85, 236, 0.5);
-}
+
+
 /* source: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html */
-div.tooltip {
+div {
+  font-family: "Times New Roman", Times, serif;
+}
+.tooltip {
+  padding: 4px;
 	box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
   border-radius: 10px;
   color: white;
@@ -19,25 +22,40 @@ div.tooltip {
   border: 2px solid black;
   pointer-events: none;
 }
+.p {
+  padding: 20px;
+  box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
+  border-radius: 10px;
+  margin: 3em auto;
+  max-width: 800px;
+  border: 10px solid rgba(68,68,68,1);
+}
+.row {
+  position: center;
+}
+
 svg {
   /* source: https://css-tricks.com/snippets/css/css-box-shadow/ */
-  font-family: "Times New Roman", Times, serif;
   box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
   background: rgba(204, 204, 204, 0.8);
   border-style: solid;
   border-width: 5px;
 }
-.slider {
-  background: rgba(103, 103, 103, 1);
-}
-.map {
+#map {
+  display: block;
+  margin: auto;
   position: relative;
-  vertical-align: top;
 }
-.pie {
-  position: relative;
-  vertical-align: bottom;
+#slider {
+  background: rgba(204, 204, 204, 0);
+  box-shadow: 5px 5px 5px rgba(68,68,68,0);
+  border-width: 0px;
 }
-.graph {
-  position: relative;
+#sun {
+  margin: 3em auto;
+  background: rgba(204, 204, 204, 0);
+}
+#bar {
+  margin: 3em auto;
+  background: rgba(204, 204, 204, 0);
 }

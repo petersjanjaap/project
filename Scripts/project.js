@@ -5,12 +5,38 @@ const padding = 60;
 
 // global year
 let YEAR = 2000;
-let COUNTRY = "DEU";
+let COUNTRY = 'DEU';
 let GDP;
 let TRADE;
 let COUNTRIES;
+let TRADE_FLOW = 'xprt';
 
-// create variable for all years
+let data = ['Export', 'Import'];
+
+let select = d3.selectAll('p')
+  .append('select')
+  	.attr('class','select')
+    .on('change',onchange)
+
+let options = select
+  .selectAll('option')
+	.data(data).enter()
+	.append('option')
+		.text(d => { return d; });
+
+function onchange() {
+	let select = d3.select('select').property('value');
+
+  if (select === 'Export') {
+    TRADE_FLOW = 'xprt';
+  } else {
+    TRADE_FLOW = 'mprt';
+  };
+
+  updateMap(TRADE[YEAR], map)
+};
+
+// create letiable for all years
 let years = [];
 for (let year = 2000; year < 2018; year++) {
   years.push(year);
@@ -30,42 +56,33 @@ let sliderStep = d3.sliderBottom()
                       YEAR = d;
                       updateMap(TRADE[YEAR], map)
                       barChartGenerator(GDP[COUNTRY][YEAR], COUNTRIES[COUNTRY]);
-                      sunBurstGenerator(TRADE[YEAR][COUNTRY].trade)
+                      sunBurstGenerator()
                       d3.select('p#value-step').text(d);
                     });
 
 let slider = d3.select('#slider')
-              .attr("class", "slider")
+              .attr('class', 'slider')
               .attr('width', width)
-              .attr('height', 150);
+              .attr('height', 100);
 
 let gStep =   slider.append('g')
-                    .attr('transform', 'translate(30,70)');
+                    .attr('transform', 'translate(30,30)');
 
+gStep.call(sliderStep);
 
-// Define the div for the tooltip
+// create tooltip
 let tooltip = d3.select('body')
               .append('div')
               .attr('class', 'tooltip')
               .style('opacity', 0);
 
-slider.append("text")
-      .attr("x", (width / 2))
-      .attr("y", padding)
-      .attr("text-anchor", "middle")
-      .attr("fill", "black")
-      .style("font-size", "34px")
-      .text("Select year from slider");
-
-gStep.call(sliderStep);
-
 // obtain datasets
-TRADE = d3.json("dataset.json");
-COUNTRIES = d3.json("COUNTRIES.json");
-GDP = d3.json("GDP.json");
+TRADE = d3.json('dataset.json');
+COUNTRIES = d3.json('COUNTRIES.json');
+GDP = d3.json('GDP.json');
 
 // load map and datasets
-let promises = [d3.json("http://enjalot.github.io/wwsd/data/world/world-110m.geojson"),
+let promises = [d3.json('http://enjalot.github.io/wwsd/data/world/world-110m.geojson'),
                 TRADE, COUNTRIES, GDP];
 
 Promise.all(promises).then(response => {
@@ -80,8 +97,9 @@ Promise.all(promises).then(response => {
   mapGenerator(map, TRADE, COUNTRIES, YEAR);
 
   // generate sun burst
-  sunBurstGenerator(TRADE[YEAR][COUNTRY].trade);
+  sunBurstGenerator();
 
   // generate bar chart
   barChartGenerator(GDP[COUNTRY][YEAR], COUNTRIES[COUNTRY]);
+
 });

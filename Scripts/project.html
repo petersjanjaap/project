@@ -5,44 +5,43 @@
   <title>Global Britain</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="project.css">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <title>A trade view of Global Britain</title>
+  <title>Global Britain</title>
 </head>
     <body>
-      <div style="background-color:rgba(204, 204, 204, 0.8);">
         <h1>Global Britain</h1>
         <h4>1045125 Jan Peters</h4>
-
+      <div class="p">
         Global Britain is the British Cabinet's slogan for its future trade policy. <br>
         Yet how Global is Britain now? And what are the opportunities after Brexit? <br> <br>
 
         This project shows the development of Britain as a trade nation over the years 2000-2017, <br>
         and displays its trade partners, the composition of trade flows and home production of these partners. <br>
       </div>
-      <div class="container-fluid">
-      <svg id="slider"></svg>
-      <div class="row">
-        <p></p>
-        <div class="col-sm-6" >
-          <svg id="map"></svg>
+        <div class="container-fluid">
+          <div class="row">
+            <svg id="map">
+              <foreignObject x="5" y="100" width="160" height="160">
+                <p>
+                </p>
+                </foreignObject>
+                <foreignObject x="100" y="600" width="780" height="80">
+                  <svg id="slider"></svg>
+                  </foreignObject>
+                </svg>
           </div>
+      <div class="row">
+      <div class="col-sm-6">
+        <svg id="sun"></svg>
+      </div>
         <div class="col-sm-6">
-          <svg id="sun"></svg>
-        </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-6">
-        <svg id="bar"></svg>
-    </div>
-      <div class="col-sm-6">
-        <div id="dropdown"></div>
+          <svg id="bar"></svg>
+      </div>
     </div>
   </div>
-    </div>
 
       <!-- sources for scripts  -->
       <script src="https://d3js.org/d3.v5.min.js"></script>

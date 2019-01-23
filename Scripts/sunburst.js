@@ -15,26 +15,36 @@ const partition = d3.partition()
 
 const color = d3.scaleOrdinal(colorbrewer.YlGnBu[5] );;
 
-function sunBurstGenerator(obj) {
+function sunBurstGenerator() {
+
+  d3.select('#sun').select('.title').remove()
+  d3.select('#sun').append('text')
+        .attr('class', 'title')
+        .attr('x', (width / 2))
+        .attr('y', 30)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'black')
+        .style('font-size', '34px')
+        .text('Export and Import components of trade with');
 
   // transform obj to readable data for hierarchy function
-  let data = childrenObject(obj);
+  let data = childrenObject(TRADE[YEAR][COUNTRY].trade);
 
   // Find the root node, calculate the node.value, and sort our nodes by node.value
   root = d3.hierarchy(data)
-      .sum(function (d) { return d.size; })
-      .sort(function (a, b) { return b.value - a.value; });
+      .sum(d => { return d.size; })
+      .sort((a, b) => { return b.value - a.value; });
 
   // Calculate the size of each arc; save the initial angles for tweening.
   partition(root);
   arc = d3.arc()
-      .startAngle(function (d) { d.x0s = d.x0; return d.x0; })
-      .endAngle(function (d) { d.x1s = d.x1; return d.x1; })
-      .innerRadius(function (d) { return d.y0; })
-      .outerRadius(function (d) { return d.y1; });
+      .startAngle(d => { d.x0s = d.x0; return d.x0; })
+      .endAngle(d => { d.x1s = d.x1; return d.x1; })
+      .innerRadius(d => { return d.y0; })
+      .outerRadius(d => { return d.y1; });
 
   // Add a <g> element for each node; create the slice variable since we'll refer to this selection many times
-  slice = g.selectAll('g.node').data(root.descendants(), function(d) { return d.data.name; });
+  slice = g.selectAll('g.node').data(root.descendants(), d => { return d.data.name; });
   newSlice = slice.enter().append('g').attr("class", "node").merge(slice);
   slice.exit().remove();
 
@@ -42,13 +52,13 @@ function sunBurstGenerator(obj) {
 
   d3.select('#sun').selectAll('path').remove();
 
-  newSlice.append('path').attr("display", function (d) { return d.depth ? null : "none"; })
+  newSlice.append('path').attr("display", d => { return d.depth ? null : "none"; })
       .attr("d", arc)
       .style("fill", "white")
       .transition()
       .duration(750)
       .style('stroke', '#fff')
-      .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
+      .style("fill", d => { return color((d.children ? d : d.parent).data.name); });
 
   // Populate the <text> elements with our data-driven titles.
   slice.selectAll('text')
@@ -58,10 +68,10 @@ function sunBurstGenerator(obj) {
   .style("fill", "white")
   .transition()
   .duration(750)
-      .attr("transform", function(d) {
+      .attr("transform", d => {
           return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
-      .attr("dx", "-20")
-      .attr("dy", ".5em")
+      .attr("dx", "-30")
+      .attr("dy", ".3em")
       .style("fill", "white")
       .text(d => {
 
@@ -71,6 +81,24 @@ function sunBurstGenerator(obj) {
         };
       })
   newSlice.on("click", highlightSelectedSlice);
+  newSlice.on('mouseover', d => {
+    // make tooltip
+    tooltip
+      .transition()
+      .duration(200)
+      .style('opacity', 0.9);
+
+    tooltip
+      .html(""+ d.data.name + ": $"+ Math.round(d.value) +" ")
+      .style('left', d3.event.pageX + 'px')
+      .style('top', d3.event.pageY - 28 + 'px');
+  })
+  .on('mouseout', d => {
+    tooltip
+      .transition()
+      .duration(500)
+      .style('opacity', 0);
+  });
 };
 
 
@@ -82,7 +110,7 @@ function highlightSelectedSlice(c,i) {
     rootPath.shift(); // remove root node from the array
 
     newSlice.style("opacity", 0.4);
-    newSlice.filter(function(d) {
+    newSlice.filter(d => {
         if (d === clicked && d.prevClicked) {
             d.prevClicked = false;
             newSlice.style("opacity", 1);
@@ -135,9 +163,8 @@ function arcTweenText(a, i) {
 function computeTextRotation(d) {
     var angle = (d.x0 + d.x1) / Math.PI * 90;
 
-    // Avoid upside-down labels
-    // return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
-    return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
+    // set labels as spokes
+    return (angle < 180) ? angle - 90 : angle + 90;
 }
 
 function childrenObject(jsonObj, name){
