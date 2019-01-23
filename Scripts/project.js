@@ -42,10 +42,12 @@ for (let year = 2000; year < 2018; year++) {
   years.push(year);
 };
 
+// source:https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
 // create slider
 let sliderStep = d3.sliderBottom()
                     .min(Math.min(...years))
                     .max(Math.max(...years))
+                    .tickFormat(d3.format('y'))
                     .width(width * 0.9)
                     .ticks(years.length)
                     .step(1)
