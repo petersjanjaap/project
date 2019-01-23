@@ -52,3 +52,12 @@
 - added drop down menu to switch display between export and import relations
 - used new color elements for charts
 - tried different styling methods for page layout
+
+#day 13
+- worked on layout, edited styles of boxes in css
+- put slider and dropdown boxes as foreign objects in svg for map
+- put titles in svg's
+- downloaded total gdp in api to use dollar values of gdp components in bar chart instead of percentages
+- added tooltips to all elements
+- asked for feedback on layout
+- made plan to finalise style tomorrow and add a line chart in the weekend to display export and import for UK with selected country
