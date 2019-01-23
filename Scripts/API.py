@@ -166,9 +166,9 @@ def load_GDP():
     """
     gdp_vars = ['NV.IND.MANF.ZS', 'NV.AGR.TOTL.ZS', 'NY.GDP.PETR.RT.ZS',
                 'NY.GDP.COAL.RT.ZS', 'NY.GDP.MINR.RT.ZS', 'NV.SRV.TOTL.ZS',
-                'NE.TRD.GNFS.ZS']
+                'NE.TRD.GNFS.ZS', 'NY.GDP.MKTP.CD']
     var_names = ['Manufacturing', 'Agriculture', 'Oil', 'Coal', 'Mining',
-                 'Services', 'Trade']
+                 'Services', 'Trade', 'GDP']
     gdp_dict = {}
     for i in range(len(gdp_vars)):
         gdp_dict[gdp_vars[i]] = var_names[i]
