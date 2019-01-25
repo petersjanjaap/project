@@ -61,3 +61,13 @@
 - added tooltips to all elements
 - asked for feedback on layout
 - made plan to finalise style tomorrow and add a line chart in the weekend to display export and import for UK with selected country
+
+#day 14
+- Hackathon
+
+#day 15
+- updated all visualizations with titles axes etc.
+- finalised interactivity for bar chart and map
+- built new legend for map
+- added a line chart to display export and import with partner country over time (finished)
+--> now that all visualizations have been finished I can focus on the layout. This will include replacing of all elements, adding info on the sources and what kind of data is visualized. I also want to built more of a story around Brexit and news events related to trade.
