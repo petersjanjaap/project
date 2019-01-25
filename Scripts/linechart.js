@@ -1,3 +1,5 @@
+// source: http://bl.ocks.org/d3noob/7030f35b72de721622b8
+
 // create SVG element for map
 let svgLine = d3.select('#line')
               .attr('width', width)
@@ -10,8 +12,7 @@ let xAxisLine = svgLine.append("g")
 // draw y axis
 let yAxis = svgLine.append("g")
                .attr("class", "y axis")
-               .attr("transform", "translate(" + padding + ", 0)");;
-               console.log('test')
+               .attr("transform", "translate(" + padding + ", 0)");
 
 function graph() {
 
