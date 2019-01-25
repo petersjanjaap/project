@@ -3,6 +3,7 @@ let svgMap = d3.select('#map')
               .attr('width', width * 1.4)
               .attr('height', height * 1.4)
 
+
 function mapGenerator(map, trade, countries, year) {
 
   // source: http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
@@ -111,12 +112,9 @@ function updateMap(data, map) {
   // determine colorDomain
   let colorDomain = [];
   for (let i = 0; i < 9; i++) {
-    let element = ((i * max) / 8);
-    if (i == 0) {
-      element = 0.1;
-    };
-    colorDomain.push(element / 100)
-  }
+    let element = ((i * max) / 9);
+    colorDomain.push(element)
+  };
   // mapColor for country
   let colorScheme;
   if (TRADE_FLOW === 'xprt') {
@@ -130,7 +128,7 @@ function updateMap(data, map) {
                      .domain(colorDomain);
 
   // create legend
-  column('d3.scaleThreshold', mapColor);
+  legend(mapColor, colorDomain);
 
   svgMap.selectAll('path').
   style('fill', d => {
@@ -138,7 +136,7 @@ function updateMap(data, map) {
       return mapColor(0)
     } else if (data.hasOwnProperty(d.id)) {
       if (data[d.id].share.hasOwnProperty([TRADE_FLOW])){
-        return mapColor(data[d.id].share[TRADE_FLOW] / 100);
+        return mapColor(data[d.id].share[TRADE_FLOW]);
       } else {
         return 'grey'
       }
@@ -171,7 +169,7 @@ function updateMap(data, map) {
         return mapColor(0)
       } else if (data.hasOwnProperty(d.id)) {
         if (data[d.id].share.hasOwnProperty([TRADE_FLOW])){
-          return mapColor(data[d.id].share[TRADE_FLOW] / 100);
+          return mapColor(data[d.id].share[TRADE_FLOW]);
         } else {
           return 'grey'
         }
@@ -187,8 +185,8 @@ function updateMap(data, map) {
   .on('click', d => {
     if (GDP.hasOwnProperty(d.id) && TRADE[YEAR].hasOwnProperty(d.id)) {
       COUNTRY = d.id;
-
-      barChartGenerator(GDP[COUNTRY][YEAR], COUNTRIES[COUNTRY]);
+      graph()
+      barChartGenerator();
       sunBurstGenerator(TRADE[YEAR][COUNTRY].trade)
     } else {
       tooltip
@@ -199,20 +197,29 @@ function updateMap(data, map) {
   });
 };
 
-function column(title, scale) {
+// generate a legend
+function legend(colorScale, colorDomain) {
   svgMap.select('.legend').remove()
 
-  let legend = d3.legendColor()
-          .labelFormat(d3.format('.2f'))
-          .labels(d3.legendHelpers.thresholdLabels)
-          .cells(10)
-          .scale(scale);
+  // source: https://stackoverflow.com/questions/42009622/how-to-create-a-horizontal-legend
+  var legendGroup = svgMap.append("g")
+                       .attr("transform", 'translate(5 , ' + height / 4 + ')')
+                       .attr('class', 'legend');
 
-  svgMap.append('g')
-    .attr('class', 'legend')
-    .attr('transform', 'translate(5 , ' + height / 4 + ')');
+  var legend = legendGroup.selectAll(".legend")
+        .data(colorDomain)
+        .enter()
+        .append("g")
+        .attr("transform", (d, i)=>"translate(0," + ((height - padding * 4)/ colorDomain.length) * i + ")");
 
-  svgMap.select('.legend')
-    .call(legend);
+  var legendRects = legend.append("rect")
+                          .attr("width", 20)
+                          .attr("height", 20)
+                          .attr("fill", (d,i)=> colorScale(d));
 
-};
+  var legendText = legend.append("text")
+                         .attr("x", 20)
+                         .attr("y", 18)
+                         .style("font-size", "11px")
+                         .text((d,i) => (d / 100).toLocaleString("en", {style: "percent"}));
+}

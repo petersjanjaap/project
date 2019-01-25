@@ -24,8 +24,8 @@ function sunBurstGenerator() {
         .attr('y', 30)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
-        .style('font-size', '34px')
-        .text('Export and Import components of trade with');
+        .style('font-size', '24px')
+        .text('Components of Export and Import with ' + COUNTRIES[COUNTRY]);
 
   // transform obj to readable data for hierarchy function
   let data = childrenObject(TRADE[YEAR][COUNTRY].trade);
@@ -89,7 +89,7 @@ function sunBurstGenerator() {
       .style('opacity', 0.9);
 
     tooltip
-      .html(""+ d.data.name + ": $"+ Math.round(d.value) +" ")
+      .html(""+ d.data.name + ": $"+ Math.round(d.value).toLocaleString() +" ")
       .style('left', d3.event.pageX + 'px')
       .style('top', d3.event.pageY - 28 + 'px');
   })

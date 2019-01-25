@@ -10,9 +10,9 @@ svgBar.append('g')
     .attr('class', 'x axis');
 
 // draw y axis
-yAxis = svgBar.append("g")
+let yAxisBar = svgBar.append("g")
        .attr("class", "y axis")
-       .attr("transform", "translate(" + padding + ", 0)")
+       .attr("transform", "translate(" + padding * 2 + ", 0)");
 
 
 // calculates the ordinal scale for a discrete variable
@@ -20,7 +20,7 @@ function ordinalScaling(variable) {
   let ordinalRange = [];
   let length = variable.length;
   for (let i = 0; i < length + 1; i++) {
-    let coordinate =  padding + i * (width - padding * 2) / length;
+    let coordinate =  padding * 2 + i * (width - padding * 3) / length;
     ordinalRange.push(coordinate);
   };
   ordinalScaler = d3.scaleOrdinal()
@@ -29,24 +29,47 @@ function ordinalScaling(variable) {
   return ordinalScaler;
 };
 
+function barChartGenerator() {
 
-function barChartGenerator(data) {
+    // creates a title
+    svgBar.select('.title').remove()
 
-    // obtain data
-    let obs = Object.values(data);
-    let sectors = Object.keys(data);
+    // check if dollar or perctentage values of gdp components are presented
+    let type;
+    if (GDP[COUNTRY][YEAR].hasOwnProperty('GDP')) {
+      type = ' in dollars';
+    } else {
+      type = ' in percentage';
+    };
+
+    svgBar.append('text')
+          .attr('class', 'title')
+          .attr('x', (width / 2))
+          .attr('y', 30)
+          .attr('text-anchor', 'middle')
+          .attr('fill', 'black')
+          .style('font-size', '24px')
+          .text('GDP components of ' + COUNTRIES[COUNTRY] + type);
+
+    let data = obsGenerator()
+    let obs = data[0];
+    let sectors = data[1];
 
     //  get scalers
     let yScale = d3.scaleLinear()
         .range([height - padding, 0 + padding])
         .domain([0, d3.max(obs)]);
 
-    yAxis.transition().duration(750).call(d3.axisLeft(yScale));
-    let xScale = ordinalScaling(sectors);
+    yAxisBar.transition()
+          .duration(750)
+          .call(d3.axisLeft(yScale)
+                  .ticks(13)
+                  .tickFormat(d3.formatPrefix("$,.0f", 1e6)));
 
+    let xScale = ordinalScaling(sectors);
     let xAxis = d3.axisBottom(xScale);
     let bars = svgBar.selectAll(".bar")
-        .data(obs);
+                      .data(obs);
 
     bars
         .enter()
@@ -64,7 +87,7 @@ function barChartGenerator(data) {
             .style('opacity', 0.9);
 
           tooltip
-            .html("$"+ Math.round(d) +" ")
+            .html("$"+ Math.round(d).toLocaleString() +" ")
             .style('left', d3.event.pageX + 'px')
             .style('top', d3.event.pageY - 28 + 'px');
         })
@@ -83,9 +106,9 @@ function barChartGenerator(data) {
         .attr("y", function(d, i) {
             return yScale(d);
         })
-        .attr("width", (width - padding * 3) / obs.length)
+        .attr("width", (width - padding * 4) / obs.length)
         .attr("x", function(d, i) {
-           return padding + i * ((width - padding * 2)  / obs.length);
+           return padding * 2 + i * ((width - padding * 3)  / obs.length);
         })
 
     bars
@@ -99,5 +122,34 @@ function barChartGenerator(data) {
     svgBar.select('.x.axis')
         .transition()
         .duration(duration)
-        .call(xAxis);
+        .call(xAxis)
+        // source for rotation: https://bl.ocks.org/mbostock/4403522
+        .selectAll("text")
+        .attr("y", 2)
+        .attr("x", 7)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(30)")
+        .style("text-anchor", "start");;
 };
+
+function obsGenerator() {
+  let obs;
+  let sectors;
+
+  // use absolute values of sectors in $
+  let gdp = GDP[COUNTRY][YEAR]['GDP'];
+
+  // make copy of data
+  let data = $.extend({}, GDP[COUNTRY][YEAR]);
+  delete data.GDP;
+
+  // get sectors and obs from data
+  sectors = Object.keys(data);
+  obs = Object.values(data);
+
+  // transform obs to absolute values
+  for (let i = 0; i < obs.length; i++) {
+    obs[i] = obs[i] * gdp / 100
+  };
+  return [obs, sectors]
+}

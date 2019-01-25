@@ -57,7 +57,7 @@ let sliderStep = d3.sliderBottom()
                       // update year based on user selection
                       YEAR = d;
                       updateMap(TRADE[YEAR], map)
-                      barChartGenerator(GDP[COUNTRY][YEAR], COUNTRIES[COUNTRY]);
+                      barChartGenerator();
                       sunBurstGenerator()
                       d3.select('p#value-step').text(d);
                     });
@@ -102,6 +102,7 @@ Promise.all(promises).then(response => {
   sunBurstGenerator();
 
   // generate bar chart
-  barChartGenerator(GDP[COUNTRY][YEAR], COUNTRIES[COUNTRY]);
+  barChartGenerator();
 
+  graph()
 });

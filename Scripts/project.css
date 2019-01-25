@@ -5,20 +5,26 @@ body {
   background-size: cover;
 };
 
+html *
+{
+   font-size: 1em !important;
+   font-family: Serif !important;
+}
 
 /* source: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html */
 div {
   font-family: "Times New Roman", Times, serif;
 }
 .tooltip {
+
+  font: 24px Times;
   padding: 4px;
 	box-shadow: 5px 5px 5px rgba(68,68,68,0.6);
   border-radius: 10px;
   color: white;
   position: absolute;
   text-align: center;
-  font: 24px Times;
-  background: rgba(103, 65, 114, 0.6);
+  background: rgba(103, 65, 114, 0.9);
   border: 2px solid black;
   pointer-events: none;
 }
@@ -58,4 +64,18 @@ svg {
 #bar {
   margin: 3em auto;
   background: rgba(204, 204, 204, 0);
+}
+
+.bar:hover {
+fill: darkred;
+}
+
+.line {
+    fill: none;
+    stroke: #ffab00;
+    stroke-width: 3;
+}
+.overlay {
+  fill: none;
+  pointer-events: all;
 }
