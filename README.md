@@ -18,3 +18,5 @@ De GDP componenten wil ik in plaats van een pie chart in een bar chart weergeven
 15-1-2019:
 Bezig met eens sun burst chart i.p.v. http://www.brightpointinc.com/united-states-trade-deficit/ deze visualisatie. Sun burst heeft betere documentatie en is voor visualisatie nog steeds interessant door export en import op te delen. Ik heb al meerdere malen een vraag ingediend via de website hierover, maar nog geen reactie gehad van assistentie.
 
+25-1-2019:
+Besloten een line chart toe te voegen om de ontwikkeling van export en import tussen UK en geselecteerd land over tijd te kunnen bekijken. Deze is verwerkt op de pagina.
