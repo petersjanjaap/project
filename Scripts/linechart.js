@@ -4,15 +4,15 @@
 let svgLine = d3.select('#line')
               .attr('width', width)
               .attr('height', height)
-              .append("g")
+              .append('g')
 
-let xAxisLine = svgLine.append("g")
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + (height - padding)+ ")")
+let xAxisLine = svgLine.append('g')
+                    .attr('class', 'x axis')
+                    .attr('transform', 'translate(0,' + (height - padding)+ ')')
 // draw y axis
-let yAxis = svgLine.append("g")
-               .attr("class", "y axis")
-               .attr("transform", "translate(" + padding + ", 0)");
+let yAxis = svgLine.append('g')
+               .attr('class', 'y axis')
+               .attr('transform', 'translate(' + padding + ', 0)');
 
 function graph() {
 
@@ -52,18 +52,18 @@ function graph() {
                     .y(d => { return yScale(d.import); });
 
   // Add the valueline path.
-  svgLine.append("path")
+  svgLine.append('path')
           .datum(data)
-          .attr("class", "line")
-          .style("stroke", "red")
-          .attr("d", imLine)
+          .attr('class', 'line')
+          .style('stroke', 'red')
+          .attr('d', imLine)
           .call(transition);
 
   // Add the valueline path.
-  svgLine.append("path")
+  svgLine.append('path')
           .datum(data)
-          .attr("class", "line")
-          .attr("d", exLine)
+          .attr('class', 'line')
+          .attr('d', exLine)
           .call(transition);
 
   // Add the X Axis
@@ -77,33 +77,50 @@ function graph() {
           .duration(750)
           .call(d3.axisLeft(yScale)
             .ticks(13)
-            .tickFormat(d3.formatPrefix("$,.0f", 1e6)));
+            .tickFormat(d3.formatPrefix('$,.0f', 1e6)));
 
 };
 
+// updates graph
 function updateGraph() {
   svgLine.select('.line')
-  .attr("d", exLine)
+  .attr('d', exLine)
   .call(transition)
 }
+
+// gets data on gdp for country over all yearss
 function getData() {
   let data = [];
 
   for(let year in TRADE) {
     let xprt;
     let mprt;
-    if (Object.values(TRADE[year][COUNTRY].trade.hasOwnProperty('xprt'))) {
-      xprt = Object.values(TRADE[year][COUNTRY].trade.xprt).reduce((a,b) => a + b, 0);
+
+    // check if data in year for country is available
+    if (TRADE[year].hasOwnProperty([COUNTRY])) {
+
+      // check if data on export and import is available
+      if (TRADE[year][COUNTRY].trade.hasOwnProperty('xprt')) {
+        xprt = Object.values(TRADE[year][COUNTRY].trade.xprt).
+        reduce((a,b) => a + b, 0);
+      } else {
+        xprt = 0;
+      };
+
+      if (Object.values(TRADE[year][COUNTRY].trade.hasOwnProperty('mprt'))) {
+        mprt = Object.values(TRADE[year][COUNTRY].trade.mprt)
+                            .reduce((a,b) => a + b, 0);
+      } else {
+        mprt = 0;
+      }
+
+    // if not fill in zero values
     } else {
       xprt = 0;
-    }
-
-    if (Object.values(TRADE[year][COUNTRY].trade.hasOwnProperty('mprt'))) {
-      mprt = Object.values(TRADE[year][COUNTRY].trade.mprt).reduce((a,b) => a + b, 0);
-    } else {
       mprt = 0;
     }
 
+    // append data
     data.push({year: year,
               export: xprt,
               import: mprt
@@ -116,10 +133,10 @@ function getData() {
 function transition(path) {
     path.transition()
         .duration(2000)
-        .attrTween("stroke-dasharray", tweenDash);
+        .attrTween('stroke-dasharray', tweenDash);
 }
 function tweenDash() {
     var l = this.getTotalLength(),
-        i = d3.interpolateString("0," + l, l + "," + l);
+        i = d3.interpolateString('0,' + l, l + ',' + l);
     return function (t) { return i(t); };
 }

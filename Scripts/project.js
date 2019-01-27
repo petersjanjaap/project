@@ -3,13 +3,16 @@ const width = 700;
 const height = 500;
 const padding = 60;
 
-// global year
+// globals
 let YEAR = 2000;
 let COUNTRY = 'DEU';
+let MAP;
 let GDP;
 let TRADE;
 let COUNTRIES;
+let MAPCOUNTRIES;
 let TRADE_FLOW = 'xprt';
+let MAPCOLOR;
 
 let data = ['Export', 'Import'];
 
@@ -56,7 +59,12 @@ let sliderStep = d3.sliderBottom()
 
                       // update year based on user selection
                       YEAR = d;
-                      updateMap(TRADE[YEAR], map)
+
+                      // reset country to germany if missing obs
+                      if (!TRADE[YEAR].hasOwnProperty(COUNTRY)) {
+                        COUNTRY = 'DEU'
+                      }
+                      updateMap()
                       barChartGenerator();
                       sunBurstGenerator()
                       d3.select('p#value-step').text(d);
@@ -67,8 +75,8 @@ let slider = d3.select('#slider')
               .attr('width', width)
               .attr('height', 100);
 
-let gStep =   slider.append('g')
-                    .attr('transform', 'translate(30,30)');
+let gStep = slider.append('g')
+                  .attr('transform', 'translate(30,30)');
 
 gStep.call(sliderStep);
 
@@ -90,13 +98,19 @@ let promises = [d3.json('http://enjalot.github.io/wwsd/data/world/world-110m.geo
 Promise.all(promises).then(response => {
 
   //  save responses
-  map = response[0];
+  MAP = response[0];
   TRADE = response[1];
   COUNTRIES = response[2];
   GDP = response[3];
 
+  // keep track of countries in map
+  MAPCOUNTRIES = [];
+  for (let i in MAP.features) {
+    MAPCOUNTRIES.push(MAP.features[i].id)
+  }
+
   // generate map
-  mapGenerator(map, TRADE, COUNTRIES, YEAR);
+  mapGenerator();
 
   // generate sun burst
   sunBurstGenerator();
@@ -104,5 +118,6 @@ Promise.all(promises).then(response => {
   // generate bar chart
   barChartGenerator();
 
+  // generate graph
   graph()
 });

@@ -101,8 +101,8 @@ function sunBurstGenerator() {
   });
 };
 
-
-// Redraw the Sunburst Based on User Input
+// source: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
+// redraw the Sunburst Based on User Input
 function highlightSelectedSlice(c,i) {
 
     clicked = c;

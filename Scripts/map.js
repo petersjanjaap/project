@@ -4,11 +4,36 @@ let svgMap = d3.select('#map')
               .attr('height', height * 1.4)
 
 
-function mapGenerator(map, trade, countries, year) {
+// create legend for gbr and countries with unknown data
+svgMap.append('rect')
+      .attr('transform', 'translate(5 , ' + height / 18 + ')')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('fill', 'gold')
 
-  // source: http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
-  //  https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
-  // Map and projection
+svgMap.append('text')
+      .attr('transform', 'translate(25 , ' + (height / 18 + 15) + ')')
+      .style('font-size', '11px')
+      .text('Great Britain')
+
+// create legend for gbr and countries with unknown data
+svgMap.append('rect')
+      .attr('transform', 'translate(5 , ' + height / 8 + ')')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('fill', 'grey');
+
+svgMap.append('text')
+      .attr('transform', 'translate(25 , ' + (height / 8 + 15) + ')')
+      .style('font-size', '11px')
+      .text('Incomplete information')
+
+function mapGenerator() {
+  /*
+  sources: http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
+  https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
+  */
+
   // set map projection
   let projection = d3.geoNaturalEarth()
                     .scale(width / 1.25 / Math.PI)
@@ -18,32 +43,137 @@ function mapGenerator(map, trade, countries, year) {
   let path = d3.geoPath()
                .projection(projection);
 
-  // Data and mapColor scale
+  // data and mapColor scale
   let data = d3.map();
 
-  // Draw the map
+  // draw the map
   svgMap.append('g')
         .attr('class', 'countries')
         .selectAll('path')
-        .data(map.features)
+        .data(MAP.features)
         .enter().append('path')
         .attr('d', path)
         .attr('id', d => { return d.id; })
 
-  // do map coloring
-  updateMap(trade[year], map)
+  // map coloring
+  updateMap();
+};
+
+// updates map colors based on data
+function updateMap() {
+
+  // removes old title and creates new one
+  svgMap.select('.title').remove()
+  let flow;
+  if (TRADE_FLOW === 'xprt') {
+    flow = 'Export';
+  } else {
+    flow = 'Import';
+  };
+  svgMap.append('text')
+        .attr('class', 'title')
+        .attr('x', (width * 1.4 / 2))
+        .attr('y', 30)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'black')
+        .style('font-size', '34px')
+        .text('Country share of UK ' + flow + ' in % in ' + YEAR);
+
+  // find ranges in min and maximum
+  let range = minMax();
+  let min = range[0];
+  let max = range[1];
+
+  // determine colorDomain
+  let colorDomain = [];
+  for (let i = 0; i < 9; i++) {
+    let element = ((i * max) / 9);
+    colorDomain.push(element)
+  };
+
+  // mapColor for country
+  let colorScheme;
+  if (TRADE_FLOW === 'xprt') {
+    colorScheme = colorbrewer.YlGnBu[9];
+  } else {
+    colorScheme = colorbrewer.YlOrBr[9];
+  }
+
+  // create colorscale
+  MAPCOLOR = d3.scaleThreshold()
+                     .range(colorScheme)
+                     .domain(colorDomain);
+
+  // create legend
+  legend(colorDomain);
+  svgMap.selectAll('path').
+  style('fill', d => {return colorFiller(d)})
+  .style('stroke', 'black')
+  .style('stroke-width', 1.5)
+  .style('opacity',0.8)
+  .on('mouseover', d => {
+
+    // make tooltip
+    tooltip
+      .transition()
+      .duration(200)
+      .style('opacity', 0.9);
+
+    // insert info tooltip
+    let info = toolInfo(d, TRADE[YEAR])
+    tooltip
+      .html(info)
+      .style('left', d3.event.pageX + 'px')
+      .style('top', d3.event.pageY - 28 + 'px');
+  })
+  .on('mouseout', d => {
+    d3.select('#' + d.id).style('fill', d => {return colorFiller(d)})
+    tooltip
+      .transition()
+      .duration(500)
+      .style('opacity', 0);
+  })
+  .on('click', d => {
+    if (d.id != 'GBR') {
+      if (TRADE[YEAR].hasOwnProperty(d.id)) {
+
+        // color selected country red
+        d3.select('#' + COUNTRY).style('opacity', 1)
+
+        COUNTRY = d.id;
+
+        d3.select('#' + COUNTRY).style('opacity', 0.3)
+        graph()
+        barChartGenerator();
+        sunBurstGenerator(TRADE[YEAR][COUNTRY].trade)
+
+      } else {
+        tooltip
+          .html('Oops, no info available')
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+      }
+    } else {
+      tooltip
+        .html('Please select a partner country')
+        .style('left', d3.event.pageX + 'px')
+        .style('top', d3.event.pageY - 28 + 'px');
+    };
+  });
 };
 
 // function to find info for tooltip
-function toolInfo(country, tradeYear) {
+function toolInfo(country) {
   if (country.hasOwnProperty('properties')) {
     if (country.properties.hasOwnProperty('name')) {
       let name = country.properties.name;
 
-      if (tradeYear.hasOwnProperty(country.id)) {
-        if (tradeYear[country.id].share.hasOwnProperty([TRADE_FLOW])) {
+      if (TRADE[YEAR].hasOwnProperty(country.id)) {
+        if (TRADE[YEAR][country.id].share.hasOwnProperty([TRADE_FLOW])) {
 
-          return name + ', ' + Math.floor(tradeYear[country.id].share[TRADE_FLOW] * 100) / 100 + '%';
+          return name + ', ' +
+          Math.floor(TRADE[YEAR][country.id].share[TRADE_FLOW] * 100)
+          / 100 + '%';
         };
       }
       else {
@@ -59,167 +189,79 @@ function toolInfo(country, tradeYear) {
 };
 
 // find minimum and maximum export values with all partners
-function minMax (data, mapCountries) {
+function minMax () {
 
   let min = 0;
   let max = 0;
 
-  for (let country in data) {
-    if (data.hasOwnProperty(country)) {
+  // iterate over data in given year
+  for (let country in TRADE[YEAR]) {
 
-    // find minima and maxima of partners share in British export
-      if (data[country].share[TRADE_FLOW] < min) {
-        min = data[country].share[TRADE_FLOW];
-      } else if (data[country].share[TRADE_FLOW] > max)  {
-        if (mapCountries.indexOf(country) >= 0 ) {
-            max = data[country].share[TRADE_FLOW];
-        };
+  // find minima and maxima of partners share in British trade
+    let amount = TRADE[YEAR][country].share[TRADE_FLOW];
+    if (amount < min) {
+      min = amount;
+    } else if (amount > max)  {
+
+      // check if country is present on map
+      if (MAPCOUNTRIES.indexOf(country) >= 0 ) {
+          max = amount;
       };
     };
   };
   return [min, max];
 };
 
-function updateMap(data, map) {
-
-  // creates a title
-  svgMap.select('.title').remove()
-  let flow;
-  if (TRADE_FLOW === 'xprt') {
-    flow = 'Export';
-  } else {
-    flow = 'Import';
-  };
-  svgMap.append('text')
-        .attr('class', 'title')
-        .attr('x', (width * 1.4 / 2))
-        .attr('y', 30)
-        .attr('text-anchor', 'middle')
-        .attr('fill', 'black')
-        .style('font-size', '34px')
-        .text('Country share of UK ' + flow + ' in %');
-
-  let mapCountries = [];
-  for (let i in map.features) {
-    mapCountries.push(map.features[i].id)
-  }
-
-  // find ranges in min and maximum
-  let range = minMax(data, mapCountries);
-  let min = range[0];
-  let max = range[1];
-
-  // determine colorDomain
-  let colorDomain = [];
-  for (let i = 0; i < 9; i++) {
-    let element = ((i * max) / 9);
-    colorDomain.push(element)
-  };
-  // mapColor for country
-  let colorScheme;
-  if (TRADE_FLOW === 'xprt') {
-    colorScheme = colorbrewer.YlGnBu[9];
-  } else {
-    colorScheme = colorbrewer.YlOrBr[9];
-  }
-
-  let mapColor = d3.scaleThreshold()
-                     .range(colorScheme)
-                     .domain(colorDomain);
-
-  // create legend
-  legend(mapColor, colorDomain);
-
-  svgMap.selectAll('path').
-  style('fill', d => {
-    if (d.id == 'GBR') {
-      return mapColor(0)
-    } else if (data.hasOwnProperty(d.id)) {
-      if (data[d.id].share.hasOwnProperty([TRADE_FLOW])){
-        return mapColor(data[d.id].share[TRADE_FLOW]);
-      } else {
-        return 'grey'
-      }
-    } else {
-      return 'grey'
-    };
-  })
-  .style('stroke', 'black')
-  .style('stroke-width', 1.5)
-  .style('opacity',0.8)
-  .on('mouseover', d => {
-    d3.select('#' + d.id).style('fill', 'red')
-
-    // make tooltip
-    tooltip
-      .transition()
-      .duration(200)
-      .style('opacity', 0.9);
-
-    // insert info tooltip
-    let info = toolInfo(d, data)
-    tooltip
-      .html(info)
-      .style('left', d3.event.pageX + 'px')
-      .style('top', d3.event.pageY - 28 + 'px');
-  })
-  .on('mouseout', d => {
-    d3.select('#' + d.id).style('fill', d => {
-      if (d.id == 'GBR') {
-        return mapColor(0)
-      } else if (data.hasOwnProperty(d.id)) {
-        if (data[d.id].share.hasOwnProperty([TRADE_FLOW])){
-          return mapColor(data[d.id].share[TRADE_FLOW]);
-        } else {
-          return 'grey'
-        }
-      } else {
-        return 'grey'
-      };
-    })
-    tooltip
-      .transition()
-      .duration(500)
-      .style('opacity', 0);
-  })
-  .on('click', d => {
-    if (GDP.hasOwnProperty(d.id) && TRADE[YEAR].hasOwnProperty(d.id)) {
-      COUNTRY = d.id;
-      graph()
-      barChartGenerator();
-      sunBurstGenerator(TRADE[YEAR][COUNTRY].trade)
-    } else {
-      tooltip
-        .html('Oops, no info available')
-        .style('left', d3.event.pageX + 'px')
-        .style('top', d3.event.pageY - 28 + 'px');
-    }
-  });
-};
-
 // generate a legend
-function legend(colorScale, colorDomain) {
+function legend(colorDomain) {
+
+  // remove old legend
   svgMap.select('.legend').remove()
 
   // source: https://stackoverflow.com/questions/42009622/how-to-create-a-horizontal-legend
-  var legendGroup = svgMap.append("g")
-                       .attr("transform", 'translate(5 , ' + height / 4 + ')')
+  let legendGroup = svgMap.append('g')
+                       .attr('transform', 'translate(5 , ' + height / 4 + ')')
                        .attr('class', 'legend');
 
-  var legend = legendGroup.selectAll(".legend")
+
+  let legend = legendGroup.selectAll('.legend')
         .data(colorDomain)
         .enter()
-        .append("g")
-        .attr("transform", (d, i)=>"translate(0," + ((height - padding * 4)/ colorDomain.length) * i + ")");
+        .append('g')
+        .attr('transform', (d, i)=>'translate(0,' + ((height - padding * 4)
+                / colorDomain.length) * i + ')');
 
-  var legendRects = legend.append("rect")
-                          .attr("width", 20)
-                          .attr("height", 20)
-                          .attr("fill", (d,i)=> colorScale(d));
+  let legendRects = legend.append('rect')
+                          .attr('width', 20)
+                          .attr('height', 20)
+                          .attr('fill', (d,i) => {return MAPCOLOR(d)});
 
-  var legendText = legend.append("text")
-                         .attr("x", 20)
-                         .attr("y", 18)
-                         .style("font-size", "11px")
-                         .text((d,i) => (d / 100).toLocaleString("en", {style: "percent"}));
-}
+  let legendText = legend.append('text')
+                         .attr('x', 20)
+                         .attr('y', 18)
+                         .style('font-size', '11px')
+                         .text((d,i) => (d / 100).toLocaleString('en',
+                            {style: 'percent'}));
+};
+
+// fills countries on map with color
+function colorFiller(d) {
+
+  // great britain is displayed in gold
+  if (d.id == 'GBR') {
+    return 'gold'
+  } else if (TRADE[YEAR].hasOwnProperty(d.id)) {
+
+    // check if data on trade flow for country in year is present
+    if (TRADE[YEAR][d.id].share.hasOwnProperty([TRADE_FLOW])){
+      return MAPCOLOR(TRADE[YEAR][d.id].share[TRADE_FLOW]);
+    }
+
+    // if no data on trade flow or country is available fill with grey
+    else {
+      return 'grey'
+    }
+  } else {
+    return 'grey'
+  };
+};

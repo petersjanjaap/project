@@ -1,7 +1,7 @@
-const svgBar = d3.select("#bar")
-                  .attr("width", width)
-                  .attr("height", height)
-                  .append("g");
+const svgBar = d3.select('#bar')
+                  .attr('width', width)
+                  .attr('height', height)
+                  .append('g');
 
 let duration = 1000;
 
@@ -10,9 +10,9 @@ svgBar.append('g')
     .attr('class', 'x axis');
 
 // draw y axis
-let yAxisBar = svgBar.append("g")
-       .attr("class", "y axis")
-       .attr("transform", "translate(" + padding * 2 + ", 0)");
+let yAxisBar = svgBar.append('g')
+       .attr('class', 'y axis')
+       .attr('transform', 'translate(' + padding * 2 + ', 0)');
 
 
 // calculates the ordinal scale for a discrete variable
@@ -64,18 +64,18 @@ function barChartGenerator() {
           .duration(750)
           .call(d3.axisLeft(yScale)
                   .ticks(13)
-                  .tickFormat(d3.formatPrefix("$,.0f", 1e6)));
+                  .tickFormat(d3.formatPrefix('$,.0f', 1e6)));
 
     let xScale = ordinalScaling(sectors);
     let xAxis = d3.axisBottom(xScale);
-    let bars = svgBar.selectAll(".bar")
+    let bars = svgBar.selectAll('.bar')
                       .data(obs);
 
     bars
         .enter()
         .append('rect')
         .attr('class', 'bar')
-        .attr("fill", "darkblue")
+        .attr('fill', 'darkblue')
         .attr('width', (width - padding * 2) / obs.length)
         .attr('height', 0)
         .attr('y', height)
@@ -87,7 +87,7 @@ function barChartGenerator() {
             .style('opacity', 0.9);
 
           tooltip
-            .html("$"+ Math.round(d).toLocaleString() +" ")
+            .html('$'+ Math.round(d).toLocaleString() +' ')
             .style('left', d3.event.pageX + 'px')
             .style('top', d3.event.pageY - 28 + 'px');
         })
@@ -100,14 +100,14 @@ function barChartGenerator() {
         .merge(bars)
         .transition()
         .duration(duration)
-        .attr("height", function(d, i) {
+        .attr('height', (d, i) => {
             return height - padding - yScale(d);
         })
-        .attr("y", function(d, i) {
+        .attr('y', (d, i) => {
             return yScale(d);
         })
-        .attr("width", (width - padding * 4) / obs.length)
-        .attr("x", function(d, i) {
+        .attr('width', (width - padding * 4) / obs.length)
+        .attr('x', (d, i) =>  {
            return padding * 2 + i * ((width - padding * 3)  / obs.length);
         })
 
@@ -124,12 +124,12 @@ function barChartGenerator() {
         .duration(duration)
         .call(xAxis)
         // source for rotation: https://bl.ocks.org/mbostock/4403522
-        .selectAll("text")
-        .attr("y", 2)
-        .attr("x", 7)
-        .attr("dy", ".35em")
-        .attr("transform", "rotate(30)")
-        .style("text-anchor", "start");;
+        .selectAll('text')
+        .attr('y', 2)
+        .attr('x', 7)
+        .attr('dy', '.35em')
+        .attr('transform', 'rotate(30)')
+        .style('text-anchor', 'start');;
 };
 
 function obsGenerator() {
