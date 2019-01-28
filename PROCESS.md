@@ -71,3 +71,13 @@
 - built new legend for map
 - added a line chart to display export and import with partner country over time (finished)
 --> now that all visualizations have been finished I can focus on the layout. This will include replacing of all elements, adding info on the sources and what kind of data is visualized. I also want to built more of a story around Brexit and news events related to trade.
+
+#day 16
+- cleaned code in all files based on style sheet
+- adjusted color schemes in map
+- added navigation bar and separate script for data sources
+- adjusted sizes of all elements based on screen width of pc
+- implemented scroll interactivity when selecting new country
+- adjusted layout of svg elements
+- adjusted sectors names in GDP, which were inconsistently noted in the original World Bank data
+- tomorrow I will write a story on Brexit html page
