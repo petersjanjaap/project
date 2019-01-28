@@ -20,3 +20,6 @@ Bezig met eens sun burst chart i.p.v. http://www.brightpointinc.com/united-state
 
 25-1-2019:
 Besloten een line chart toe te voegen om de ontwikkeling van export en import tussen UK en geselecteerd land over tijd te kunnen bekijken. Deze is verwerkt op de pagina.
+
+28-1-2019:
+Navigatie bar toegevoegd met nieuwe html pagina's voor verhaal over Brexit en verwijzingen naar externe library's en data
