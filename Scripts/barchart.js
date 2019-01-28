@@ -14,7 +14,6 @@ let yAxisBar = svgBar.append('g')
        .attr('class', 'y axis')
        .attr('transform', 'translate(' + padding * 2 + ', 0)');
 
-
 // calculates the ordinal scale for a discrete variable
 function ordinalScaling(variable) {
   let ordinalRange = [];
@@ -23,6 +22,7 @@ function ordinalScaling(variable) {
     let coordinate =  padding * 2 + i * (width - padding * 3) / length;
     ordinalRange.push(coordinate);
   };
+
   ordinalScaler = d3.scaleOrdinal()
           .domain(variable)
           .range(ordinalRange);
@@ -45,13 +45,13 @@ function barChartGenerator() {
     svgBar.append('text')
           .attr('class', 'title')
           .attr('x', (width / 2))
-          .attr('y', 30)
+          .attr('y', 20)
           .attr('text-anchor', 'middle')
           .attr('fill', 'black')
-          .style('font-size', '24px')
+          .style('font-size', '18px')
           .text('GDP components of ' + COUNTRIES[COUNTRY] + type);
 
-    let data = obsGenerator()
+    let data = obsGenerator();
     let obs = data[0];
     let sectors = data[1];
 
@@ -61,6 +61,7 @@ function barChartGenerator() {
         .domain([0, d3.max(obs)]);
 
     yAxisBar.transition()
+          .delay(800)
           .duration(750)
           .call(d3.axisLeft(yScale)
                   .ticks(13)
@@ -71,8 +72,7 @@ function barChartGenerator() {
     let bars = svgBar.selectAll('.bar')
                       .data(obs);
 
-    bars
-        .enter()
+    bars.enter()
         .append('rect')
         .attr('class', 'bar')
         .attr('fill', 'darkblue')
@@ -80,6 +80,7 @@ function barChartGenerator() {
         .attr('height', 0)
         .attr('y', height)
         .on('mouseover', d => {
+
           // make tooltip
           tooltip
             .transition()
@@ -99,6 +100,7 @@ function barChartGenerator() {
         })
         .merge(bars)
         .transition()
+        .delay(800)
         .duration(duration)
         .attr('height', (d, i) => {
             return height - padding - yScale(d);
@@ -108,11 +110,10 @@ function barChartGenerator() {
         })
         .attr('width', (width - padding * 4) / obs.length)
         .attr('x', (d, i) =>  {
-           return padding * 2 + i * ((width - padding * 3)  / obs.length);
+           return padding * 2 + 1 + i * ((width - padding * 3)  / obs.length);
         })
 
-    bars
-        .exit()
+    bars.exit()
         .transition()
         .duration(duration)
         .attr('height', 0)
@@ -123,13 +124,14 @@ function barChartGenerator() {
         .transition()
         .duration(duration)
         .call(xAxis)
+
         // source for rotation: https://bl.ocks.org/mbostock/4403522
         .selectAll('text')
         .attr('y', 2)
         .attr('x', 7)
         .attr('dy', '.35em')
         .attr('transform', 'rotate(30)')
-        .style('text-anchor', 'start');;
+        .style('text-anchor', 'start');
 };
 
 function obsGenerator() {
@@ -149,7 +151,7 @@ function obsGenerator() {
 
   // transform obs to absolute values
   for (let i = 0; i < obs.length; i++) {
-    obs[i] = obs[i] * gdp / 100
+    obs[i] = obs[i] * gdp / 100;
   };
-  return [obs, sectors]
-}
+  return [obs, sectors];
+};

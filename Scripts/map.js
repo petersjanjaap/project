@@ -1,30 +1,43 @@
+let mapWidth = screen.width / 1.3;
+let mapHeight = screen.height / 1.3;
+
 // create SVG element for map
 let svgMap = d3.select('#map')
-              .attr('width', width * 1.4)
-              .attr('height', height * 1.4)
-
+              .attr('width', mapWidth)
+              .attr('height', mapHeight)
 
 // create legend for gbr and countries with unknown data
 svgMap.append('rect')
-      .attr('transform', 'translate(5 , ' + height / 18 + ')')
+      .attr("fill", "url(#https://upload.wikimedia.org/wikipedia/commons/d/d2/Question_mark.svg)")
+      .attr('transform', 'translate(5 , 5)')
+      .attr('width', 20)
+      .attr('height', 20)
+      .append("image")
+                    .attr("xlink:href", "https://upload.wikimedia.org/wikipedia/commons/d/d2/Question_mark.svg")
+                    .attr('width', 20)
+                    .attr('height', 20);
+
+// create legend for gbr and countries with unknown data
+svgMap.append('rect')
+      .attr('transform', 'translate(5 , ' + height / 13 + ')')
       .attr('width', 20)
       .attr('height', 20)
       .attr('fill', 'gold')
 
 svgMap.append('text')
-      .attr('transform', 'translate(25 , ' + (height / 18 + 15) + ')')
+      .attr('transform', 'translate(25 , ' + (height / 13 + 15) + ')')
       .style('font-size', '11px')
       .text('Great Britain')
 
 // create legend for gbr and countries with unknown data
 svgMap.append('rect')
-      .attr('transform', 'translate(5 , ' + height / 8 + ')')
+      .attr('transform', 'translate(5 , ' + height / 7 + ')')
       .attr('width', 20)
       .attr('height', 20)
       .attr('fill', 'grey');
 
 svgMap.append('text')
-      .attr('transform', 'translate(25 , ' + (height / 8 + 15) + ')')
+      .attr('transform', 'translate(25 , ' + (height / 7 + 15) + ')')
       .style('font-size', '11px')
       .text('Incomplete information')
 
@@ -36,8 +49,8 @@ function mapGenerator() {
 
   // set map projection
   let projection = d3.geoNaturalEarth()
-                    .scale(width / 1.25 / Math.PI)
-                    .translate([width / 1.4, height / 1.4])
+                    .scale(mapWidth / 1.9 / Math.PI)
+                    .translate([mapWidth / 1.9, mapHeight / 2.1])
 
   // generate projetion
   let path = d3.geoPath()
@@ -70,13 +83,14 @@ function updateMap() {
   } else {
     flow = 'Import';
   };
+
   svgMap.append('text')
         .attr('class', 'title')
-        .attr('x', (width * 1.4 / 2))
-        .attr('y', 30)
+        .attr('x', (mapWidth / 2))
+        .attr('y', 20)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
-        .style('font-size', '34px')
+        .style('font-size', '24px')
         .text('Country share of UK ' + flow + ' in % in ' + YEAR);
 
   // find ranges in min and maximum
@@ -86,17 +100,17 @@ function updateMap() {
 
   // determine colorDomain
   let colorDomain = [];
-  for (let i = 0; i < 9; i++) {
-    let element = ((i * max) / 9);
+  for (let i = 0; i < 8; i++) {
+    let element = ((i * max) / 8);
     colorDomain.push(element)
   };
 
   // mapColor for country
   let colorScheme;
   if (TRADE_FLOW === 'xprt') {
-    colorScheme = colorbrewer.YlGnBu[9];
+    colorScheme = colorbrewer.Greens[9];
   } else {
-    colorScheme = colorbrewer.YlOrBr[9];
+    colorScheme = colorbrewer.Reds[9];
   }
 
   // create colorscale
@@ -108,10 +122,13 @@ function updateMap() {
   legend(colorDomain);
   svgMap.selectAll('path').
   style('fill', d => {return colorFiller(d)})
-  .style('stroke', 'black')
-  .style('stroke-width', 1.5)
+  .style('stroke', 'rgba(204, 204, 204)')
+  .style('stroke-width', 1)
   .style('opacity',0.8)
   .on('mouseover', d => {
+
+    d3.select('#' + d.id)
+      .style('fill', 'darkblue');
 
     // make tooltip
     tooltip
@@ -120,7 +137,7 @@ function updateMap() {
       .style('opacity', 0.9);
 
     // insert info tooltip
-    let info = toolInfo(d, TRADE[YEAR])
+    let info = toolInfo(d)
     tooltip
       .html(info)
       .style('left', d3.event.pageX + 'px')
@@ -138,14 +155,27 @@ function updateMap() {
       if (TRADE[YEAR].hasOwnProperty(d.id)) {
 
         // color selected country red
-        d3.select('#' + COUNTRY).style('opacity', 1)
+        d3.select('#' + COUNTRY)
+          .style('opacity', 1)
+          .style('stroke-width', 1)
 
         COUNTRY = d.id;
 
-        d3.select('#' + COUNTRY).style('opacity', 0.3)
-        graph()
+        d3.select('#' + COUNTRY)
+          .style('opacity', 0.9)
+          .style('stroke-width', 3)
+
+
+        // scroll down page https://jsfiddle.net/cyril123/xyczrts2/1/
+        d3.select("body").transition()
+            .duration(2000)
+            .tween("scroll", scrollTween(document.body
+              .getBoundingClientRect().height - window.innerHeight));
+
+        // update graph bar chart and sunburst
+        graph();
         barChartGenerator();
-        sunBurstGenerator(TRADE[YEAR][COUNTRY].trade)
+        sunBurstGenerator();
 
       } else {
         tooltip
@@ -160,13 +190,22 @@ function updateMap() {
         .style('top', d3.event.pageY - 28 + 'px');
     };
   });
+
+  // scheme for selected country
+  d3.select('#' + COUNTRY)
+    .style('opacity', 0.9)
+    .style('stroke-width', 3);
 };
 
 // function to find info for tooltip
 function toolInfo(country) {
+
   if (country.hasOwnProperty('properties')) {
     if (country.properties.hasOwnProperty('name')) {
       let name = country.properties.name;
+      if (name == "England") {
+        return 'Great Britain';
+      }
 
       if (TRADE[YEAR].hasOwnProperty(country.id)) {
         if (TRADE[YEAR][country.id].share.hasOwnProperty([TRADE_FLOW])) {
@@ -216,13 +255,12 @@ function minMax () {
 function legend(colorDomain) {
 
   // remove old legend
-  svgMap.select('.legend').remove()
+  svgMap.select('.legend').remove();
 
   // source: https://stackoverflow.com/questions/42009622/how-to-create-a-horizontal-legend
   let legendGroup = svgMap.append('g')
                        .attr('transform', 'translate(5 , ' + height / 4 + ')')
                        .attr('class', 'legend');
-
 
   let legend = legendGroup.selectAll('.legend')
         .data(colorDomain)
@@ -238,7 +276,7 @@ function legend(colorDomain) {
 
   let legendText = legend.append('text')
                          .attr('x', 20)
-                         .attr('y', 18)
+                         .attr('y', 16)
                          .style('font-size', '11px')
                          .text((d,i) => (d / 100).toLocaleString('en',
                             {style: 'percent'}));
@@ -249,7 +287,7 @@ function colorFiller(d) {
 
   // great britain is displayed in gold
   if (d.id == 'GBR') {
-    return 'gold'
+    return 'gold';
   } else if (TRADE[YEAR].hasOwnProperty(d.id)) {
 
     // check if data on trade flow for country in year is present
@@ -259,9 +297,20 @@ function colorFiller(d) {
 
     // if no data on trade flow or country is available fill with grey
     else {
-      return 'grey'
+      return 'grey';
     }
   } else {
-    return 'grey'
+    return 'grey';
   };
 };
+
+// source: https://jsfiddle.net/cyril123/xyczrts2/1/
+function scrollTween(offset) {
+  return function () {
+      var i = d3.interpolateNumber(window.pageYOffset ||
+                                   document.documentElement.scrollTop, offset);
+      return function (t) {
+          scrollTo(0, i(t));
+      };
+  };
+}

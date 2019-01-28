@@ -1,6 +1,6 @@
 // width, height and padding for svgs
-const width = 700;
-const height = 500;
+const width = screen.width / 2.1;
+const height = screen.height / 1.8;
 const padding = 60;
 
 // globals
@@ -16,19 +16,20 @@ let MAPCOLOR;
 
 let data = ['Export', 'Import'];
 
-let select = d3.selectAll('p')
-  .append('select')
-  	.attr('class','select')
-    .on('change',onchange)
+let select = d3.select('p')
+                .append('select')
+              	.attr('class','select')
+                .on('change', onchange);
 
-let options = select
-  .selectAll('option')
-	.data(data).enter()
-	.append('option')
-		.text(d => { return d; });
+let options = select.selectAll('option')
+              	     .data(data)
+                     .enter()
+                     .append('option')
+              	     .text(d => { return d; });
 
 function onchange() {
-	let select = d3.select('select').property('value');
+	let select = d3.select('select')
+                  .property('value');
 
   if (select === 'Export') {
     TRADE_FLOW = 'xprt';
@@ -36,10 +37,10 @@ function onchange() {
     TRADE_FLOW = 'mprt';
   };
 
-  updateMap(TRADE[YEAR], map)
+  updateMap();
 };
 
-// create letiable for all years
+// create variable for all years
 let years = [];
 for (let year = 2000; year < 2018; year++) {
   years.push(year);
@@ -47,11 +48,19 @@ for (let year = 2000; year < 2018; year++) {
 
 // source:https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
 // create slider
+let slider = d3.select('#map')
+              .append('svg')
+              .attr('transform', 'translate('
+              + ((screen.width / 1.3 - screen.width / 1.3 * 0.9) / 2) +' , '
+              + (screen.height / 1.3 * 0.86) +')')
+              .attr('width', screen.width / 1.3 * 0.9)
+              .attr('height', screen.height / 1.3 * 0.2);
+
 let sliderStep = d3.sliderBottom()
                     .min(Math.min(...years))
                     .max(Math.max(...years))
                     .tickFormat(d3.format('y'))
-                    .width(width * 0.9)
+                    .width((screen.width / 1.3) * 0.9)
                     .ticks(years.length)
                     .step(1)
                     .default(0.015)
@@ -63,17 +72,14 @@ let sliderStep = d3.sliderBottom()
                       // reset country to germany if missing obs
                       if (!TRADE[YEAR].hasOwnProperty(COUNTRY)) {
                         COUNTRY = 'DEU'
-                      }
-                      updateMap()
-                      barChartGenerator();
-                      sunBurstGenerator()
-                      d3.select('p#value-step').text(d);
-                    });
+                      };
 
-let slider = d3.select('#slider')
-              .attr('class', 'slider')
-              .attr('width', width)
-              .attr('height', 100);
+                      updateMap();
+                      barChartGenerator();
+                      sunBurstGenerator();
+                      d3.select('p#value-step')
+                        .text(d);
+                    });
 
 let gStep = slider.append('g')
                   .attr('transform', 'translate(30,30)');
@@ -107,7 +113,7 @@ Promise.all(promises).then(response => {
   MAPCOUNTRIES = [];
   for (let i in MAP.features) {
     MAPCOUNTRIES.push(MAP.features[i].id)
-  }
+  };
 
   // generate map
   mapGenerator();
@@ -119,5 +125,5 @@ Promise.all(promises).then(response => {
   barChartGenerator();
 
   // generate graph
-  graph()
+  graph();
 });

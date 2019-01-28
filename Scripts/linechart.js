@@ -17,25 +17,28 @@ let yAxis = svgLine.append('g')
 function graph() {
 
   // remove old elements
-  svgLine.select('.title').remove()
-  svgLine.selectAll('path').remove()
-  let data = getData()
+  svgLine.select('.title').remove();
+  svgLine.selectAll('path').remove();
 
   // add new title
   svgLine.append('text')
         .attr('class', 'title')
         .attr('x', (width / 2))
-        .attr('y', 30)
+        .attr('y', 20)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
         .style('font-size', '18px')
-        .text('Export and Import from 2000 - 2017 with ' + COUNTRIES[COUNTRY]);
+        .text('Total Export and Import in $ from 2000 - 2017 with '
+              + COUNTRIES[COUNTRY]);
 
-  let max = Math.max(d3.max(data, d => { return d.export; }), d3.max(data, d => { return d.import; }));
+  // get data and find maximum observation
+  let data = getData();
+  let max = Math.max(d3.max(data, d => { return d.export; }),
+                     d3.max(data, d => { return d.import; }));
 
   // set the ranges
   let xScale = d3.scaleLinear()
-                  .range([padding, width - padding])
+                  .range([padding + 1, width - padding])
                   .domain(d3.extent(data, d => { return d.year;}));
 
   let yScale = d3.scaleLinear()
@@ -68,17 +71,16 @@ function graph() {
 
   // Add the X Axis
   xAxisLine.transition()
-        .duration(750)
-        .call(d3.axisBottom(xScale)
+            .duration(750)
+            .call(d3.axisBottom(xScale)
                 .tickFormat(d3.format('y')));
 
   // Add the Y Axis
   yAxis.transition()
           .duration(750)
           .call(d3.axisLeft(yScale)
-            .ticks(13)
-            .tickFormat(d3.formatPrefix('$,.0f', 1e6)));
-
+                  .ticks(13)
+                  .tickFormat(d3.formatPrefix('$,.0f', 1e5)));
 };
 
 // updates graph
@@ -132,7 +134,8 @@ function getData() {
 // https://bl.ocks.org/mbostock/5649592
 function transition(path) {
     path.transition()
-        .duration(2000)
+        .delay(600)
+        .duration(1500)
         .attrTween('stroke-dasharray', tweenDash);
 }
 function tweenDash() {
