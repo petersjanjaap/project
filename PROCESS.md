@@ -77,3 +77,6 @@
 - adjusted color schemes in map
 - added navigation bar and separate script for data sources
 - adjusted sizes of all elements based on screen width of pc
+- implemented scroll interactivity when selecting new country
+- adjusted layout of svg elements
+- tomorrow I will write a story on Brexit html page
