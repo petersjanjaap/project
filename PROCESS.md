@@ -79,4 +79,5 @@
 - adjusted sizes of all elements based on screen width of pc
 - implemented scroll interactivity when selecting new country
 - adjusted layout of svg elements
+- adjusted sectors names in GDP, which were inconsistently noted in the original World Bank data
 - tomorrow I will write a story on Brexit html page
