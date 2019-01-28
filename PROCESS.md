@@ -71,3 +71,9 @@
 - built new legend for map
 - added a line chart to display export and import with partner country over time (finished)
 --> now that all visualizations have been finished I can focus on the layout. This will include replacing of all elements, adding info on the sources and what kind of data is visualized. I also want to built more of a story around Brexit and news events related to trade.
+
+#day 16
+- cleaned code in all files based on style sheet
+- adjusted color schemes in map
+- added navigation bar and separate script for data sources
+- adjusted sizes of all elements based on screen width of pc
