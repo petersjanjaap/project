@@ -15,6 +15,20 @@ const partition = d3.partition()
 
 const color = d3.scaleOrdinal(colorbrewer.YlGnBu[5] );
 
+// dict for titles in sunburst
+const dict =
+    {
+      mprt: 'Import',
+      xprt: 'Export',
+      Transp: 'Transport',
+      manuf: 'Industry',
+      Fuels: 'Fuels',
+      OresMtls: 'Ores & Metals',
+      Food: 'Food',
+      AgrRaw: 'Agriculture',
+      Chemical: 'Chemical'
+    };
+
 // generates Sun Bursts
 function sunBurstGenerator() {
 
@@ -90,12 +104,13 @@ function sunBurstGenerator() {
                                   + computeTextRotation(d) + ')'; })
           .attr('dx', '-27')
           .attr('dy', '.3em')
+          .style('font-size', '12px')
           .style('fill', 'white')
           .text(d => {
 
                   // only display text if space available
                   if (d.value / root.value > 0.01){
-                    return (d.parent ? d.data.name : '')
+                    return dict[(d.parent ? d.data.name : '')]
                   };
                 });
 
@@ -109,7 +124,8 @@ function sunBurstGenerator() {
       .style('opacity', 0.9);
 
     tooltip
-      .html(''+ d.data.name + ': $'+ Math.round(d.value).toLocaleString() +' ')
+      .html(''+ dict[d.data.name] + ': $' +
+            Math.round(d.value).toLocaleString() +' ')
       .style('left', d3.event.pageX + 'px')
       .style('top', d3.event.pageY - 28 + 'px');
     })
