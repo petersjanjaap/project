@@ -6,7 +6,44 @@ let svgLine = d3.select('#line')
               .attr('height', height)
               .append('g');
 
-// create legend for gbr and countries with unknown data
+// create info button
+// add question mark to info button
+let lineInfo = 'The Line Chart shows the total $ values of export and import between the U.K. and the partner country over the years 2000-2017. This graph is updated automatically after you selects a new partner country. Import is displayed in orange and export in red.'
+svgLine.append('text')
+      .attr('transform', 'translate(' + (width - 30)+ ' , 30)')
+      .text('?')
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'white')
+      .style('font-size', '30px');
+
+svgLine.append('rect')
+      .attr('transform', 'translate(' + (width - 49)+ ' , 0)')
+      .attr('width', 40)
+      .attr('height', 40)
+      .attr('opacity', 0.3)
+      .on('mouseover', d => {
+
+        // make tooltip
+        tooltip
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
+
+        // insert info tooltip
+        tooltip
+          .html(lineInfo)
+          .style('left', d3.event.pageX - 100 + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+      })
+      .on('mouseout', d => {
+
+        tooltip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+
+// create legend for export
 svgLine.append('rect')
       .attr('transform', 'translate(5 , ' + height / 90 + ')')
       .attr('width', 20)
@@ -18,7 +55,7 @@ svgLine.append('text')
       .style('font-size', '8px')
       .text('Export');
 
-// create legend for gbr and countries with unknown data
+// create legend for import
 svgLine.append('rect')
       .attr('transform', 'translate(5 , ' + height / 15 + ')')
       .attr('width', 20)
@@ -144,19 +181,19 @@ function getData() {
                             .reduce((a,b) => a + b, 0);
       } else {
         mprt = 0;
-      }
+      };
 
     // if not fill in zero values
     } else {
       xprt = 0;
       mprt = 0;
-    }
+    };
 
     // append data
     data.push({year: year,
               export: xprt,
               import: mprt
-            })
+            });
   };
   return data;
 };
@@ -164,7 +201,7 @@ function getData() {
 // https://bl.ocks.org/mbostock/5649592
 function transition(path) {
     path.transition()
-        .delay(600)
+        .delay(100)
         .duration(1500)
         .attrTween('stroke-dasharray', tweenDash);
 }

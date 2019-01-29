@@ -1,10 +1,11 @@
 // source: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 // make svg and append g element and to the center of the element
-const g = d3.select('#sun')
+svgSun = d3.select('#sun')
             .attr('width', width)
-            .attr('height', height)
-            .append('g')
-            .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+            .attr('height', height);
+
+const g = svgSun.append('g')
+          .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
 const radius = Math.min(width * 1.15, height * 1.15) / 2 - padding;
 
@@ -29,6 +30,43 @@ const dict =
       Chemical: 'Chemical',
       Textiles: 'Textiles'
     };
+
+// create info button
+// add question mark to info button
+let sunInfo = 'The Sun Burst displays the total export and import values with the partner country in the selected year. In the outer side the components of export and import are displayed. You can hoover over elements to view the absolute $ value and select a specific part of the Sun Burst by clicking on it. '
+svgSun.append('text')
+      .attr('transform', 'translate(' + (width - 30)+ ' , 30)')
+      .text('?')
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'white')
+      .style('font-size', '30px');
+
+svgSun.append('rect')
+      .attr('transform', 'translate(' + (width - 49)+ ' , 0)')
+      .attr('width', 40)
+      .attr('height', 40)
+      .attr('opacity', 0.3)
+      .on('mouseover', d => {
+
+        // make tooltip
+        tooltip
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
+
+        // insert info tooltip
+        tooltip
+          .html(sunInfo)
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+      })
+      .on('mouseout', d => {
+
+        tooltip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
 
 // generates Sun Bursts
 function sunBurstGenerator() {

@@ -3,6 +3,42 @@ const svgBar = d3.select('#bar')
                   .attr('height', height)
                   .append('g');
 
+// create info button
+// add question mark to info button
+let barInfo = 'The Bar chart shows sectors comprising GDP in the partner country. This view offers a comparison between the sectors composing trade flows and significant value producing parts of the economy in the partner country. The user can hoover over the Bar Chart to view absolute values.'
+svgBar.append('text')
+      .attr('transform', 'translate(' + (width - 30)+ ' , 30)')
+      .text('?')
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'white')
+      .style('font-size', '30px');
+
+svgBar.append('rect')
+      .attr('transform', 'translate(' + (width - 49)+ ' , 0)')
+      .attr('width', 40)
+      .attr('height', 40)
+      .attr('opacity', 0.3)
+      .on('mouseover', d => {
+
+        // make tooltip
+        tooltip
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
+
+        // insert info tooltip
+        tooltip
+          .html(barInfo)
+          .style('left', d3.event.pageX - 100 + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+      })
+      .on('mouseout', d => {
+
+        tooltip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
 let duration = 1000;
 
 svgBar.append('g')

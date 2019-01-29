@@ -1,10 +1,10 @@
 let mapWidth = screen.width / 1.3;
 let mapHeight = screen.height / 1.3;
-
+let mapInfo = 'Countries are displayed on a heatmap indicating their relative share in total export or import with the U.K. over the years 2000-2017. You can either select export and import shares and a specific year or country after which the visualizations update. Hoover over countries to view their name and partner share. '
 // create SVG element for map
 let svgMap = d3.select('#map')
               .attr('width', mapWidth)
-              .attr('height', mapHeight)
+              .attr('height', mapHeight);
 
 let flow;
 
@@ -13,12 +13,12 @@ svgMap.append('rect')
       .attr('transform', 'translate(5 , ' + height / 13 + ')')
       .attr('width', 20)
       .attr('height', 20)
-      .attr('fill', 'gold')
+      .attr('fill', 'gold');
 
 svgMap.append('text')
       .attr('transform', 'translate(25 , ' + (height / 13 + 15) + ')')
       .style('font-size', '11px')
-      .text('Great Britain')
+      .text('Great Britain');
 
 // create legend for gbr and countries with unknown data
 svgMap.append('rect')
@@ -30,7 +30,43 @@ svgMap.append('rect')
 svgMap.append('text')
       .attr('transform', 'translate(25 , ' + (height / 7 + 15) + ')')
       .style('font-size', '11px')
-      .text('Incomplete information')
+      .text('Incomplete information');
+
+// create info button
+// add question mark to info button
+svgMap.append('text')
+      .attr('transform', 'translate(' + (mapWidth - 30)+ ' , 30)')
+      .text('?')
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'white')
+      .style('font-size', '30px');
+
+svgMap.append('rect')
+      .attr('transform', 'translate(' + (mapWidth - 49)+ ' , 0)')
+      .attr('width', 40)
+      .attr('height', 40)
+      .attr('opacity', 0.3)
+      .on('mouseover', d => {
+
+        // make tooltip
+        tooltip
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
+
+        // insert info tooltip
+        tooltip
+          .html(mapInfo)
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+      })
+      .on('mouseout', d => {
+
+        tooltip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
 
 function mapGenerator() {
   /*
