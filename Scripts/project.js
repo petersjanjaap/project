@@ -100,7 +100,7 @@ let tooltip = d3.select('body')
 TRADE = d3.json('Data/dataset.json');
 COUNTRIES = d3.json('Data/COUNTRIES.json');
 GDP = d3.json('Data/GDP.json');
-MAP = d3.json('Data/world-110m.json')
+MAP = d3.json('Data/world-110m.json');
 
 // load map and datasets
 let promises = [MAP, TRADE, COUNTRIES, GDP];
