@@ -16,7 +16,7 @@ let MAPCOLOR;
 
 let data = ['Export', 'Import'];
 
-let select = d3.select('p')
+let select = d3.select('.select')
                 .append('select')
               	.attr('class','select')
                 .on('change', onchange);
@@ -60,7 +60,7 @@ let sliderStep = d3.sliderBottom()
                     .min(Math.min(...years))
                     .max(Math.max(...years))
                     .tickFormat(d3.format('y'))
-                    .width((screen.width / 1.3) * 0.9)
+                    .width((screen.width / 1.3) * 0.8)
                     .ticks(years.length)
                     .step(1)
                     .default(0.015)
@@ -86,6 +86,10 @@ let gStep = slider.append('g')
 
 gStep.call(sliderStep);
 
+// make all years readable
+slider.selectAll('text')
+      .style('fill', 'black');
+
 // create tooltip
 let tooltip = d3.select('body')
               .append('div')
@@ -93,13 +97,13 @@ let tooltip = d3.select('body')
               .style('opacity', 0);
 
 // obtain datasets
-TRADE = d3.json('dataset.json');
-COUNTRIES = d3.json('COUNTRIES.json');
-GDP = d3.json('GDP.json');
+TRADE = d3.json('Data/dataset.json');
+COUNTRIES = d3.json('Data/COUNTRIES.json');
+GDP = d3.json('Data/GDP.json');
+MAP = d3.json('Data/world-110m.json')
 
 // load map and datasets
-let promises = [d3.json('http://enjalot.github.io/wwsd/data/world/world-110m.geojson'),
-                TRADE, COUNTRIES, GDP];
+let promises = [MAP, TRADE, COUNTRIES, GDP];
 
 Promise.all(promises).then(response => {
 
