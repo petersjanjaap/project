@@ -1,5 +1,4 @@
 // source: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
-
 // make svg and append g element and to the center of the element
 const g = d3.select('#sun')
             .attr('width', width)
@@ -13,6 +12,7 @@ const radius = Math.min(width * 1.15, height * 1.15) / 2 - padding;
 const partition = d3.partition()
                     .size([2 * Math.PI, radius]);
 
+// color for sun burst
 const color = d3.scaleOrdinal(colorbrewer.YlGnBu[5] );
 
 // dict for titles in sunburst
@@ -23,10 +23,11 @@ const dict =
       Transp: 'Transport',
       manuf: 'Industry',
       Fuels: 'Fuels',
-      OresMtls: 'Ores & Metals',
+      OresMtls: 'Metals',
       Food: 'Food',
       AgrRaw: 'Agriculture',
-      Chemical: 'Chemical'
+      Chemical: 'Chemical',
+      Textiles: 'Textiles'
     };
 
 // generates Sun Bursts
@@ -84,12 +85,16 @@ function sunBurstGenerator() {
           .attr('d', arc)
           .attr('class', 'arc')
           .style('fill', 'white')
+
+          // create white explosion effect
           .transition()
-          .delay(800)
-          .duration(750)
+          .delay(1700)
+          .duration(700)
+
+          // adjust to normal colour
           .style('stroke', '#fff')
           .style('fill', d => {
-                  return color((d.children ? d : d.parent).data.name); });
+            return color((d.children ? d : d.parent).data.name); });
 
   // remove old text and enter new text to slices
   slice.selectAll('text')
@@ -98,6 +103,7 @@ function sunBurstGenerator() {
   newSlice.append('text')
           .style('fill', 'white')
           .transition()
+          .delay(1500)
           .duration(750)
           .attr('transform', d => {
               return 'translate(' + arc.centroid(d) + ')rotate('
@@ -114,27 +120,29 @@ function sunBurstGenerator() {
                   };
                 });
 
+  // reset opacity to one for all slices
+  newSlice.style('opacity', 1);
   newSlice.on('click', highlightSelectedSlice);
   newSlice.on('mouseover', d => {
 
-    // use tooltip for slice info
-    tooltip
-      .transition()
-      .duration(200)
-      .style('opacity', 0.9);
+            // use tooltip for slice info
+            tooltip
+              .transition()
+              .duration(200)
+              .style('opacity', 0.9);
 
-    tooltip
-      .html(''+ dict[d.data.name] + ': $' +
-            Math.round(d.value).toLocaleString() +' ')
-      .style('left', d3.event.pageX + 'px')
-      .style('top', d3.event.pageY - 28 + 'px');
-    })
-  .on('mouseout', d => {
-    tooltip
-      .transition()
-      .duration(500)
-      .style('opacity', 0);
-  });
+            tooltip
+              .html(''+ dict[d.data.name] + ': $' +
+                    Math.round(d.value).toLocaleString() +' ')
+              .style('left', d3.event.pageX + 'px')
+              .style('top', d3.event.pageY - 28 + 'px');
+            })
+          .on('mouseout', d => {
+            tooltip
+              .transition()
+              .duration(500)
+              .style('opacity', 0);
+          });
 };
 
 // source: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
@@ -143,7 +151,9 @@ function highlightSelectedSlice(c,i) {
 
     clicked = c;
     var rootPath = clicked.path(root).reverse();
-    rootPath.shift(); // remove root node from the array
+
+    // remove root node from the array
+    rootPath.shift();
 
     newSlice.style('opacity', 0.4);
     newSlice.filter(d => {
@@ -161,9 +171,6 @@ function highlightSelectedSlice(c,i) {
         }
     })
         .style('opacity', 1);
-
-    d3.select('#sidebar').text('another!');
-
 };
 
 function arcTweenPath(a, i) {
@@ -179,8 +186,8 @@ function arcTweenPath(a, i) {
     return tween;
 };
 
-/**
- * When switching data: interpolate the text centroids and rotation.
+/*
+ adjust text rotation and centroids to new data
  */
 function arcTweenText(a, i) {
 
@@ -193,8 +200,7 @@ function arcTweenText(a, i) {
 }
 
 /*
-Calculate the correct distance to rotate each label based on its location
-in the sunburst.
+calculate distance to center to rotate text based on location
  */
 function computeTextRotation(d) {
     var angle = (d.x0 + d.x1) / Math.PI * 90;

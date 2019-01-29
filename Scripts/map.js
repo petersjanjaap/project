@@ -6,16 +6,7 @@ let svgMap = d3.select('#map')
               .attr('width', mapWidth)
               .attr('height', mapHeight)
 
-// create legend for gbr and countries with unknown data
-svgMap.append('rect')
-      .attr("fill", "url(#https://upload.wikimedia.org/wikipedia/commons/d/d2/Question_mark.svg)")
-      .attr('transform', 'translate(5 , 5)')
-      .attr('width', 20)
-      .attr('height', 20)
-      .append("image")
-                    .attr("xlink:href", "https://upload.wikimedia.org/wikipedia/commons/d/d2/Question_mark.svg")
-                    .attr('width', 20)
-                    .attr('height', 20);
+let flow;
 
 // create legend for gbr and countries with unknown data
 svgMap.append('rect')
@@ -77,7 +68,7 @@ function updateMap() {
 
   // removes old title and creates new one
   svgMap.select('.title').remove()
-  let flow;
+
   if (TRADE_FLOW === 'xprt') {
     flow = 'Export';
   } else {
@@ -154,35 +145,42 @@ function updateMap() {
     if (d.id != 'GBR') {
       if (TRADE[YEAR].hasOwnProperty(d.id)) {
 
-        // color selected country red
-        d3.select('#' + COUNTRY)
-          .style('opacity', 1)
-          .style('stroke-width', 1)
+        // update graph bar chart and sunburst if possible
+        if (TRADE[YEAR][d.id].share.hasOwnProperty(TRADE_FLOW)){
 
-        COUNTRY = d.id;
+                  // color selected country red
+                  d3.select('#' + COUNTRY)
+                    .style('opacity', 1)
+                    .style('stroke-width', 1)
 
-        d3.select('#' + COUNTRY)
-          .style('opacity', 0.9)
-          .style('stroke-width', 3)
+                  COUNTRY = d.id;
 
+                  d3.select('#' + COUNTRY)
+                    .style('opacity', 0.9)
+                    .style('stroke-width', 3)
 
-        // scroll down page https://jsfiddle.net/cyril123/xyczrts2/1/
-        d3.select("body").transition()
-            .duration(2000)
-            .tween("scroll", scrollTween(document.body
-              .getBoundingClientRect().height - window.innerHeight));
+                  // scroll down page https://jsfiddle.net/cyril123/xyczrts2/1/
+                  d3.select('body').transition()
+                      .duration(2000)
+                      .tween('scroll', scrollTween(document.body
+                        .getBoundingClientRect().height - window.innerHeight));
 
-        // update graph bar chart and sunburst
-        graph();
-        barChartGenerator();
-        sunBurstGenerator();
+          graph();
+          barChartGenerator();
+          sunBurstGenerator();
+        } else {
+          tooltip
+            .html('Oops, no info available')
+            .style('left', d3.event.pageX + 'px')
+            .style('top', d3.event.pageY - 28 + 'px');
+        };
 
       } else {
         tooltip
           .html('Oops, no info available')
           .style('left', d3.event.pageX + 'px')
           .style('top', d3.event.pageY - 28 + 'px');
-      }
+      };
     } else {
       tooltip
         .html('Please select a partner country')
@@ -203,16 +201,18 @@ function toolInfo(country) {
   if (country.hasOwnProperty('properties')) {
     if (country.properties.hasOwnProperty('name')) {
       let name = country.properties.name;
-      if (name == "England") {
+      if (name == 'England') {
         return 'Great Britain';
       }
 
       if (TRADE[YEAR].hasOwnProperty(country.id)) {
         if (TRADE[YEAR][country.id].share.hasOwnProperty([TRADE_FLOW])) {
 
-          return name + ', ' +
+          return name + ' ' + flow + ' share: ' +
           Math.floor(TRADE[YEAR][country.id].share[TRADE_FLOW] * 100)
           / 100 + '%';
+        } else {
+            return name + '% unknown';
         };
       }
       else {

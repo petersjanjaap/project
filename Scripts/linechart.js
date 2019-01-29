@@ -4,16 +4,42 @@
 let svgLine = d3.select('#line')
               .attr('width', width)
               .attr('height', height)
-              .append('g')
+              .append('g');
+
+// create legend for gbr and countries with unknown data
+svgLine.append('rect')
+      .attr('transform', 'translate(5 , ' + height / 90 + ')')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('fill', 'red');
+
+svgLine.append('text')
+      .attr('transform', 'translate(25 , ' + (height / 90 + 15) + ')')
+      .style('font-size', '8px')
+      .text('Export');
+
+// create legend for gbr and countries with unknown data
+svgLine.append('rect')
+      .attr('transform', 'translate(5 , ' + height / 15 + ')')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('fill', 'orange');
+
+svgLine.append('text')
+      .attr('transform', 'translate(25 , ' + (height / 15 + 15) + ')')
+      .style('font-size', '8px')
+      .text('Import');
 
 let xAxisLine = svgLine.append('g')
                     .attr('class', 'x axis')
-                    .attr('transform', 'translate(0,' + (height - padding)+ ')')
+                    .attr('transform', 'translate(0,' + (height - padding)+ ')');
+
 // draw y axis
 let yAxis = svgLine.append('g')
                .attr('class', 'y axis')
                .attr('transform', 'translate(' + padding + ', 0)');
 
+// update graph
 function graph() {
 
   // remove old elements
@@ -27,7 +53,7 @@ function graph() {
         .attr('y', 20)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
-        .style('font-size', '18px')
+        .style('font-size', '16px')
         .text('Total Export and Import in $ from 2000 - 2017 with '
               + COUNTRIES[COUNTRY]);
 
@@ -66,6 +92,8 @@ function graph() {
   svgLine.append('path')
           .datum(data)
           .attr('class', 'line')
+          .attr('d', imLine)
+          .style('stroke', 'orange')
           .attr('d', exLine)
           .call(transition);
 
@@ -73,13 +101,14 @@ function graph() {
   xAxisLine.transition()
             .duration(750)
             .call(d3.axisBottom(xScale)
-                .tickFormat(d3.format('y')));
+                    .tickFormat(d3.format('y')));
 
   // Add the Y Axis
   yAxis.transition()
           .duration(750)
           .call(d3.axisLeft(yScale)
                   .ticks(13)
+                  // source https://bl.ocks.org/mbostock/9764126
                   .tickFormat(d3.formatPrefix('$,.0f', 1e5)));
 };
 
@@ -87,8 +116,8 @@ function graph() {
 function updateGraph() {
   svgLine.select('.line')
   .attr('d', exLine)
-  .call(transition)
-}
+  .call(transition);
+};
 
 // gets data on gdp for country over all yearss
 function getData() {
@@ -100,17 +129,18 @@ function getData() {
 
     // check if data in year for country is available
     if (TRADE[year].hasOwnProperty([COUNTRY])) {
+      let info = TRADE[year][COUNTRY].trade;
 
-      // check if data on export and import is available
-      if (TRADE[year][COUNTRY].trade.hasOwnProperty('xprt')) {
-        xprt = Object.values(TRADE[year][COUNTRY].trade.xprt).
+      // check if data on export is available
+      if (info.hasOwnProperty('xprt')) {
+        xprt = Object.values(info.xprt).
         reduce((a,b) => a + b, 0);
       } else {
         xprt = 0;
       };
-
-      if (Object.values(TRADE[year][COUNTRY].trade.hasOwnProperty('mprt'))) {
-        mprt = Object.values(TRADE[year][COUNTRY].trade.mprt)
+      // check if data on import is available
+      if (info.hasOwnProperty('mprt')) {
+        mprt = Object.values(info.mprt)
                             .reduce((a,b) => a + b, 0);
       } else {
         mprt = 0;
