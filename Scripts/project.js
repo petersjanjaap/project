@@ -103,12 +103,12 @@ GDP = d3.json('Data/GDP.json');
 MAP = d3.json('Data/world-110m.json');
 
 // load map and datasets
-let promises = [MAP, TRADE, COUNTRIES, GDP];
+// let promises = [MAP, TRADE, COUNTRIES, GDP];
 
 Promise.all(promises).then(response => {
 
   //  save responses
-  MAP = response[0];
+  // MAP = response[0];
   TRADE = response[1];
   COUNTRIES = response[2];
   GDP = response[3];
