@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <!-- https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h -->
+  <title>Global Britain</title>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' type='text/css' href='../Styles/project.css'>
+  <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+
+  <title>Global Britain</title>
+  <!-- source: https://stackoverflow.com/questions/15786937/add-image-in-title-bar -->
+  <link rel='shortcut icon' type='image/png' href='https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png' />
+</head>
+    <body>
+      <!-- https://www.w3schools.com/css/css_navbar.asp -->
+      <ul>
+        <li><a class='active' href='project.html'>Home</a></li>
+        <li><a href='brexit.html'>Brexit</a></li>s
+        <li><a href='about.html'>About</a></li>
+    </ul>
+    <div class='header'>
+      <h1>Global Britain</h1>
+      <p>Jan Peters 10452125</p>
+    </div>
+      <div class='p'>
+        <font size='6'><b>Brexit is coming.</b></font> <br> <br>
+
+        On Friday 29 March, the United Kingdom will leave the European Union.
+        The British government is working hard on expanding foreign trade relations.
+        See here who were Britain's most important trade partners over the years 2000-2017.
+        You can see shares of U.K. export and import, compositions of trade and foreign markets measured by GDP.
+      </div>
+        <div class='container-fluid'>
+          <div class='row'>
+            <svg id='map'>
+              <foreignObject x='5' y='7' width='160' height='160'>
+                  <p class='select'>
+                  </p>
+              </foreignObject>
+            </svg>
+          </div>
+    <div class='row'>
+      <svg id='line'></svg>
+    </div>
+    <div class='row'>
+    <div class='col-sm-6'>
+      <svg id='sun'></svg>
+    </div>
+      <div class='col-sm-6'>
+        <svg id='bar'></svg>
+    </div>
+  </div>
+  </div>
+
+      <!-- sources for scripts  -->
+      <script src='https://d3js.org/d3.v5.min.js'></script>
+      <script src='https://d3js.org/d3-scale-chromatic.v1.min.js'></script>
+      <script src='https://d3js.org/d3-geo-projection.v2.min.js'></script>
+      <script src='https://unpkg.com/d3-simple-slider/build/d3-simple-slider.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js'></script>
+      <script type='text/javascript' src='https://d3js.org/colorbrewer.v1.min.js'></script>
+      <script src='../Scripts/project.js'></script>
+      <script src='../Scripts/map.js'></script>
+      <script src='../Scripts/sunburst.js'></script>
+      <script src='../Scripts/barchart.js'></script>
+      <script src='../Scripts/linechart.js'></script>
+</body>
+</html>
