@@ -81,3 +81,9 @@
 - adjusted layout of svg elements
 - adjusted sectors names in GDP, which were inconsistently noted in the original World Bank data
 - tomorrow I will write a story on Brexit html page
+
+#day 17
+- updated news page
+- updated overall styling for other pages
+- fixed GIT repository
+- further cleaned code
