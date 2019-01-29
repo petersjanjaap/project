@@ -87,3 +87,4 @@
 - updated overall styling for other pages
 - fixed GIT repository
 - further cleaned code
+- added info buttons to visualizations
