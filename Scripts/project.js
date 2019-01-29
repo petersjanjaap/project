@@ -99,7 +99,7 @@ let tooltip = d3.select('body')
 // obtain datasets
 TRADE = d3.json('Data/dataset.json');
 COUNTRIES = d3.json('Data/COUNTRIES.json');
-GDP = d3.json('Data/GDP.json');
+GDP = d3.json('Data/gdp.json');
 MAP = d3.json('Data/world-110m.json');
 
 // load map and datasets
