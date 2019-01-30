@@ -23,3 +23,22 @@ Besloten een line chart toe te voegen om de ontwikkeling van export en import tu
 
 28-1-2019:
 Navigatie bar toegevoegd met nieuwe html pagina's voor verhaal over Brexit en verwijzingen naar externe library's en data
+
+Acknowledgements:
+project.js:
+Slider: // source:https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
+
+map.js:
+Map: http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
+    https://bl.ocks.org/adamjanes/6cf85a4fd79e122695ebde7d41fe327f
+Scroll: https://jsfiddle.net/cyril123/xyczrts2/1/
+Legend: https://stackoverflow.com/questions/42009622/how-to-create-a-horizontal-legend
+
+sunburst.js
+Sun: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
+Redraw sun and interactivity: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
+
+linechart.js
+line graph: http://bl.ocks.org/d3noob/7030f35b72de721622b8
+tick format: https://bl.ocks.org/mbostock/9764126
+stroke: https://bl.ocks.org/mbostock/5649592
