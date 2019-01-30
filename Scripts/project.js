@@ -48,11 +48,13 @@ for (let year = 2000; year < 2018; year++) {
 
 // source:https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
 // create slider
+let xPosition = (screen.width / 1.3 - screen.width / 1.3 * 0.9) / 2;
+let yPosition = (screen.height / 1.3 * 0.86);
+
 let slider = d3.select('#map')
               .append('svg')
-              .attr('transform', 'translate('
-              + ((screen.width / 1.3 - screen.width / 1.3 * 0.9) / 2) +' , '
-              + (screen.height / 1.3 * 0.86) +')')
+              .attr('x', xPosition)
+              .attr('y', yPosition)
               .attr('width', screen.width / 1.3 * 0.9)
               .attr('height', screen.height / 1.3 * 0.2);
 
