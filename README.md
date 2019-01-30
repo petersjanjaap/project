@@ -24,13 +24,13 @@ Besloten een line chart toe te voegen om de ontwikkeling van export en import tu
 28-1-2019:
 Navigatie bar toegevoegd met nieuwe html pagina's voor verhaal over Brexit en verwijzingen naar externe library's en data
 
-Acknowledgements:
+**Acknowledgements:**
 
-project.js:
+**project.js:**
 
 Slider: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
 
-map.js:
+**map.js:**
 
 
 Map: http://bl.ocks.org/palewire/d2906de347a160f38bc0b7ca57721328
@@ -42,7 +42,7 @@ Scroll: https://jsfiddle.net/cyril123/xyczrts2/1/
 Legend: https://stackoverflow.com/questions/42009622/how-to-create-a-horizontal-legend
 
 
-sunburst.js
+**sunburst.js:**
 
 
 Sun: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
@@ -50,7 +50,7 @@ Sun: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 Redraw sun and interactivity: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 
 
-linechart.js
+**linechart.js:**
 
 
 line graph: http://bl.ocks.org/d3noob/7030f35b72de721622b8
@@ -61,3 +61,18 @@ tick format: https://bl.ocks.org/mbostock/9764126
 
 stroke: https://bl.ocks.org/mbostock/5649592
 
+**project.css:**
+
+overall layout: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html
+
+navigation bar: https://www.w3schools.com/css/css_navbar.asp
+
+box shadow: https://css-tricks.com/snippets/css/css-box-shadow/
+
+**html:**
+
+bootstrap grids https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h
+
+image in title bar: https://stackoverflow.com/questions/15786937/add-image-in-title-bar
+
+navigation bar: https://www.w3schools.com/css/css_navbar.asp
