@@ -39,6 +39,7 @@ svgBar.append('rect')
           .duration(500)
           .style('opacity', 0);
       });
+
 let duration = 1000;
 
 svgBar.append('g')

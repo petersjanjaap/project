@@ -74,7 +74,7 @@ let xAxisLine = svgLine.append('g')
 // draw y axis
 let yAxis = svgLine.append('g')
                .attr('class', 'y axis')
-               .attr('transform', 'translate(' + padding + ', 0)');
+               .attr('transform', 'translate(' + (padding - 4.3 )+ ', 0)');
 
 // update graph
 function graph() {
@@ -82,6 +82,7 @@ function graph() {
   // remove old elements
   svgLine.select('.title').remove();
   svgLine.selectAll('path').remove();
+  svgLine.selectAll('circle').remove();
 
   // add new title
   svgLine.append('text')
@@ -121,7 +122,7 @@ function graph() {
   svgLine.append('path')
           .datum(data)
           .attr('class', 'line')
-          .style('stroke', 'red')
+          .style('stroke', 'orange')
           .attr('d', imLine)
           .call(transition);
 
@@ -129,10 +130,82 @@ function graph() {
   svgLine.append('path')
           .datum(data)
           .attr('class', 'line')
-          .attr('d', imLine)
-          .style('stroke', 'orange')
+          .style('stroke', 'red')
           .attr('d', exLine)
           .call(transition);
+
+  // source circles: https://bl.ocks.org/NGuernse/58e1057b7174fd1717993e3f5913d1a7
+  // add circles
+  svgLine.append('g')
+        .selectAll('circle')
+        .data(data)
+        .enter()
+        .append('circle')
+        .on('mouseover', d => {
+
+          // make tooltip
+          tooltip
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+
+          let format = d3.formatPrefix('$,.0f', 1e5);
+
+          tooltip
+            .html('Export $ Value ' + d.year + ': ' + format(d.export))
+            .style('left', d3.event.pageX + 'px')
+            .style('top', d3.event.pageY - 28 + 'px');
+        })
+        .on('mouseout', d => {
+
+          tooltip
+            .transition()
+            .duration(500)
+            .style('opacity', 0);
+        })
+        .transition()
+        .delay(250)
+        .duration(1000)
+        .attr('cx', d => {return xScale(d.year); })
+        .attr('cy', d => {return yScale(d.export); })
+        .attr('r', d =>  {return 5; })
+        .style('fill', 'red');
+
+    // add circles
+    svgLine.append('g')
+          .selectAll('circle')
+          .data(data)
+          .enter()
+          .append('circle')
+          .on('mouseover', d => {
+
+            // make tooltip
+            tooltip
+              .transition()
+              .duration(200)
+              .style('opacity', 0.9);
+
+            let format = d3.formatPrefix('$,.0f', 1e5);
+
+            tooltip
+              .html('Import $ Value ' + d.year + ': ' + format(d.import))
+              .style('left', d3.event.pageX + 'px')
+              .style('top', d3.event.pageY - 28 + 'px');
+          })
+          .on('mouseout', d => {
+
+            tooltip
+              .transition()
+              .duration(500)
+              .style('opacity', 0);
+          })
+          .transition()
+          .delay(250)
+          .duration(750)
+          .attr('cx', d => {return xScale(d.year); })
+          .attr('cy', d => {return yScale(d.import); })
+          .attr('r', d =>  {return 5; })
+          .style('fill', 'orange');
 
   // Add the X Axis
   xAxisLine.transition()
