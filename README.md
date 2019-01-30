@@ -81,7 +81,7 @@ Stroke: https://bl.ocks.org/mbostock/5649592
 
 **project.css:**
 
-Overall layout: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html
+Tooltip: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html
 
 Navigation bar: https://www.w3schools.com/css/css_navbar.asp
 
