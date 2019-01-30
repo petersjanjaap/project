@@ -1,83 +1,70 @@
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-  <!-- https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h -->
-  <title>Global Britain</title>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' href='../Styles/project.css'>
-  <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-  <title>Global Britain</title>
-  <!-- source: https://stackoverflow.com/questions/15786937/add-image-in-title-bar -->
-  <link rel='shortcut icon' type='image/png' href='https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png' />
-</head>
-    <body>
+   <head>
+      <!-- https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h -->
+      <title>Global Britain</title>
+      <meta charset='utf-8'>
+      <meta name='viewport' content='width=device-width, initial-scale=1'>
+      <link rel='stylesheet' type='text/css' href='../Styles/project.css'>
+      <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+      <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+      <title>Global Britain</title>
+      <!-- source: https://stackoverflow.com/questions/15786937/add-image-in-title-bar -->
+      <link rel='shortcut icon' type='image/png' href='https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png' />
+   </head>
+   <body>
       <ul>
-        <li><a href='index.html'>Home</a></li>
-        <li><a href='brexit.html'>Brexit</a></li>
-        <li><a class='active' href='about.html'>About</a></li>
-    </ul>
-    <div class='header'>
-      <h1>Global Britain</h1>
-      <p>Jan Peters 10452125</p>
-    </div>
+         <li><a href='index.html'>Home</a></li>
+         <li><a href='brexit.html'>Brexit</a></li>
+         <li><a class='active' href='about.html'>About</a></li>
+      </ul>
+      <div class='header'>
+         <h1>Global Britain</h1>
+         <p>Jan Peters 10452125</p>
+      </div>
       <div class='container-fluid'>
-      <div class='row'>
-      <div class='col-sm-6'>
-        <div class='p'>
-            <font size='6'><b>Visualizations: </b></font>
-          <br> <br>
-
-          <b>Map:</b> <br>
-          Countries are displayed on a heatmap indicating their relative share in total export or import with the U.K. over the years 2000-2017.
-          The user can either select export and import shares and a specific year or country after which the visualizations update.
-          The user can hoover over countries to view their name and partner share. <br> <br>
-
-
-          <b>Sun Burst:</b> <br>
-          The Sun Burst displays the total export and import values with the partner country in the selected year.
-          In the outer side the components of export and import are displayed. The user can hoover over elements to view the absolute $ value
-          and select a specific part of the Sun Burst by clicking on it. <br> <br>
-
-          <b>Bart Chart:</b> <br>
-          The Bar chart shows sectors comprising GDP in the partner country. This view offers a comparison between the sectors composing trade
-          flows and significant value producing parts of the economy in the partner country. The user can hoover over the Bar Chart to view
-          absolute values. <br> <br>
-
-          <b>Line Chart:</b> <br>
-          The Line Chart shows the total $ values of export and import between the U.K. and the partner country over the years 2000-2017.
-          This graph is updated automatically after the user selects a new partner country. Import is displayed in orange and export in red.
-        </div>
+         <div class='row'>
+            <div class='col-sm-6'>
+               <div class='p'>
+                  <font size='6'><b>Visualizations: </b></font>
+                  <br> <br>
+                  <b>Map:</b> <br>
+                  Countries are displayed on a heatmap indicating their relative share in total export or import with the U.K. over the years 2000-2017.
+                  The user can either select export and import shares and a specific year or country after which the visualizations update.
+                  The user can hoover over countries to view their name and partner share. <br> <br>
+                  <b>Sun Burst:</b> <br>
+                  The Sun Burst displays the total export and import values with the partner country in the selected year.
+                  In the outer side the components of export and import are displayed. The user can hoover over elements to view the absolute $ value
+                  and select a specific part of the Sun Burst by clicking on it. <br> <br>
+                  <b>Bart Chart:</b> <br>
+                  The Bar chart shows sectors comprising GDP in the partner country. This view offers a comparison between the sectors composing trade
+                  flows and significant value producing parts of the economy in the partner country. The user can hoover over the Bar Chart to view
+                  absolute values. <br> <br>
+                  <b>Line Chart:</b> <br>
+                  The Line Chart shows the total $ values of export and import between the U.K. and the partner country over the years 2000-2017.
+                  This graph is updated automatically after the user selects a new partner country. Import is displayed in orange and export in red.
+               </div>
+            </div>
+            <div class='col-sm-6'>
+               <div class='p'>
+                  <font size='6'><b>Sources: </b></font>
+                  <br> <br>
+                  <b>Data:</b> <br>
+                  GDP data: <a href='https://data.worldbank.org/indicator'>World Bank Economic Indicators</a> <br>
+                  Trade data: <a href='https://wits.worldbank.org/countrystats.aspx'>World Integrated Trade Solution (World Bank)</a> <br>
+                  API documentation: <a href='http://wits.worldbank.org/data/public/WITSAPI_UserGuide.pdf'>API user guide World Bank</a> <br> <br>
+                  <b>Libraries:</b> <br>
+                  <a href='https://d3js.org/d3.v5.min.js'>D3 version 5</a> <br>
+                  <a href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>Bootstrap</a> <br>
+                  <a href='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'>Ajax</a> <br> <br>
+                  <b>Add-ins:</b> <br>
+                  <a href='https://d3js.org/d3-scale-chromatic.v1.min.js'>D3 scale chromatic</a> <br>
+                  <a href='https://d3js.org/d3-geo-projection.v2.min.js'>D3 Geo-projection</a> <br>
+                  <a href='https://d3js.org/colorbrewer.v1.min.js'>D3 ColorBrewer</a> <br>
+                  <a href='https://unpkg.com/d3-simple-slider/build/d3-simple-slider.js'>D3 Slider</a> <br>
+               </div>
+            </div>
+         </div>
       </div>
-        <div class='col-sm-6'>
-          <div class='p'>
-              <font size='6'><b>Sources: </b></font>
-            <br> <br>
-
-            <b>Data:</b> <br>
-            GDP data: <a href='https://data.worldbank.org/indicator'>World Bank Economic Indicators</a> <br>
-            Trade data: <a href='https://wits.worldbank.org/countrystats.aspx'>World Integrated Trade Solution (World Bank)</a> <br>
-            API documentation: <a href='http://wits.worldbank.org/data/public/WITSAPI_UserGuide.pdf'>API user guide World Bank</a> <br> <br>
-
-            <b>Libraries:</b> <br>
-            <a href='https://d3js.org/d3.v5.min.js'>D3 version 5</a> <br>
-            <a href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>Bootstrap</a> <br>
-            <a href='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'>Ajax</a> <br> <br>
-
-            <b>Add-ins:</b> <br>
-            <a href='https://d3js.org/d3-scale-chromatic.v1.min.js'>D3 scale chromatic</a> <br>
-            <a href='https://d3js.org/d3-geo-projection.v2.min.js'>D3 Geo-projection</a> <br>
-            <a href='https://d3js.org/colorbrewer.v1.min.js'>D3 ColorBrewer</a> <br>
-            <a href='https://unpkg.com/d3-simple-slider/build/d3-simple-slider.js'>D3 Slider</a> <br>
-
-
-
-          </div>
-      </div>
-    </div>
-  </div>
-
-
-</body>
+   </body>
 </html>
