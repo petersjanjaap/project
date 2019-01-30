@@ -104,7 +104,7 @@ Image in title bar: https://stackoverflow.com/questions/15786937/add-image-in-ti
 
 Navigation bar: https://www.w3schools.com/css/css_navbar.asp
 
-**Afbeeldingen en video**
+**Afbeeldingen en video's:**
 
 Video: Universiteit Groningen - https://www.youtube.com/watch?v=HEN0pppgjrw
 
