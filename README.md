@@ -27,7 +27,7 @@ De laatste pagina is een overzicht met een beschrijving van alle gebruikte visua
 Dit gedeelte geeft een overzicht van alle veranderingen sinds het begin van dit project.
 
 8-1-2019: 
-In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Britain', ofwel handelsstromen van de UK met de rest van de wereld.  
+In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Britain', ofwel handelsstromen van de UK met de rest van de wereld in plaats van alle wereldwijde handelsstromen, omdat de hoeveelheid data excessief zou worden.  
 
 
 10-1-2019:
