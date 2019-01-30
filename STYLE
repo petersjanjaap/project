@@ -12,7 +12,7 @@ Style Guides sources:
     Visualizations in separate scripts.
     End vars and functions with semicolons.
     Single quotes.
-    Code lines < 80 characters (except for links).
+    Code lines < 80 characters (except for links and visualization descriptions).
     Breaking long lines on +.
     Multi-line comment with /*.
     Arrow functions instead of function() within block.
