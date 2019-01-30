@@ -25,8 +25,10 @@ Besloten een line chart toe te voegen om de ontwikkeling van export en import tu
 Navigatie bar toegevoegd met nieuwe html pagina's voor verhaal over Brexit en verwijzingen naar externe library's en data
 
 Acknowledgements:
+
 project.js:
-Slider: // source:https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
+
+Slider: https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518
 
 map.js:
 
