@@ -72,6 +72,8 @@ Redraw sun and interactivity: https://bl.ocks.org/denjn5/6d161cb24695c8df503f910
 
 bar chart: https://alignedleft.com/tutorials/d3/making-a-bar-chart
 
+interactiviteit: https://stackoverflow.com/questions/40571511/dynamically-updating-d3-bar-chart
+
 rotatie titels x-as: https://bl.ocks.org/mbostock/4403522
 
 **linechart.js:**
