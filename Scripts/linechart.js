@@ -74,7 +74,7 @@ let xAxisLine = svgLine.append('g')
 // draw y axis
 let yAxis = svgLine.append('g')
                .attr('class', 'y axis')
-               .attr('transform', 'translate(' + (padding - 4.3 )+ ', 0)');
+               .attr('transform', 'translate(' + (padding - 5 )+ ', 0)');
 
 // update graph
 function graph() {
