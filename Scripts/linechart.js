@@ -1,14 +1,15 @@
 // source: http://bl.ocks.org/d3noob/7030f35b72de721622b8
 
 // create SVG element for map
-let svgLine = d3.select('#line')
+const svgLine = d3.select('#line')
               .attr('width', width)
               .attr('height', height)
               .append('g');
 
 // create info button
 // add question mark to info button
-let lineInfo = 'The Line Chart shows the total $ values of export and import between the U.K. and the partner country over the years 2000-2017. This graph is updated automatically after you selects a new partner country. Import is displayed in orange and export in red.'
+const lineInfo = 'The Line Chart shows the total $ values of export and import between the U.K. and the partner country over the years 2000-2017. This graph is updated automatically after you select a new partner country. Import is displayed in orange and export in red.';
+
 svgLine.append('text')
       .attr('transform', 'translate(' + (width - 30)+ ' , 30)')
       .text('?')

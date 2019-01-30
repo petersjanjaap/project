@@ -1,3 +1,5 @@
+// source: https://alignedleft.com/tutorials/d3/making-a-bar-chart
+
 const svgBar = d3.select('#bar')
                   .attr('width', width)
                   .attr('height', height)
@@ -5,7 +7,8 @@ const svgBar = d3.select('#bar')
 
 // create info button
 // add question mark to info button
-let barInfo = 'The Bar chart shows sectors comprising GDP in the partner country. This view offers a comparison between the sectors composing trade flows and significant value producing parts of the economy in the partner country. The user can hoover over the Bar Chart to view absolute values.'
+const barInfo = 'The Bar chart shows sectors comprising GDP in the partner country. This view offers a comparison between the sectors composing trade flows and significant value producing parts of the economy in the partner country. The user can hoover over the Bar Chart to view absolute values.'
+
 svgBar.append('text')
       .attr('transform', 'translate(' + (width - 30)+ ' , 30)')
       .text('?')
@@ -97,6 +100,7 @@ function barChartGenerator() {
         .range([height - padding, 0 + padding])
         .domain([0, d3.max(obs)]);
 
+    // source interactivity: https://stackoverflow.com/questions/40571511/dynamically-updating-d3-bar-chart
     yAxisBar.transition()
           .delay(800)
           .duration(750)

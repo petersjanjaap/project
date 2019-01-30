@@ -1,20 +1,20 @@
 // source: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 // make svg and append g element and to the center of the element
-svgSun = d3.select('#sun')
-            .attr('width', width)
-            .attr('height', height);
+const svgSun = d3.select('#sun')
+                  .attr('width', width)
+                  .attr('height', height);
 
-const g = svgSun.append('g')
+let g = svgSun.append('g')
           .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
 const radius = Math.min(width * 1.15, height * 1.15) / 2 - padding;
 
 // create sunburst data structure and sizes
-const partition = d3.partition()
+let partition = d3.partition()
                     .size([2 * Math.PI, radius]);
 
 // color for sun burst
-const color = d3.scaleOrdinal(colorbrewer.YlGnBu[5] );
+let color = d3.scaleOrdinal(colorbrewer.YlGnBu[5] );
 
 // dict for titles in sunburst
 const dict =
@@ -33,7 +33,8 @@ const dict =
 
 // create info button
 // add question mark to info button
-let sunInfo = 'The Sun Burst displays the total export and import values with the partner country in the selected year. In the outer side the components of export and import are displayed. You can hoover over elements to view the absolute $ value and select a specific part of the Sun Burst by clicking on it. '
+const sunInfo = 'The Sun Burst displays the total export and import values with the partner country in the selected year. In the outer side the components of export and import are displayed. You can hoover over elements to view the absolute $ value and select a specific part of the Sun Burst by clicking on it. '
+
 svgSun.append('text')
       .attr('transform', 'translate(' + (width - 30)+ ' , 30)')
       .text('?')

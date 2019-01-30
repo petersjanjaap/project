@@ -1,8 +1,9 @@
 let mapWidth = screen.width / 1.3;
 let mapHeight = screen.height / 1.3;
-let mapInfo = 'Countries are displayed on a heatmap indicating their relative share in total export or import with the U.K. over the years 2000-2017. You can either select export and import shares and a specific year or country after which the visualizations update. Hoover over countries to view their name and partner share. '
+const mapInfo = 'Countries are displayed on a heatmap indicating their relative share in total export or import with the U.K. over the years 2000-2017. You can either select export and import shares and a specific year or country after which the visualizations update. Hoover over countries to view their name and partner share.';
+
 // create SVG element for map
-let svgMap = d3.select('#map')
+const svgMap = d3.select('#map')
               .attr('width', mapWidth)
               .attr('height', mapHeight);
 
