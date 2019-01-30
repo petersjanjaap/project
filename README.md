@@ -55,6 +55,8 @@ linechart.js
 
 line graph: http://bl.ocks.org/d3noob/7030f35b72de721622b8
 
+circles: https://bl.ocks.org/NGuernse/58e1057b7174fd1717993e3f5913d1a7
+
 tick format: https://bl.ocks.org/mbostock/9764126
 
 stroke: https://bl.ocks.org/mbostock/5649592
