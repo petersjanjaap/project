@@ -74,6 +74,7 @@ let sliderStep = d3.sliderBottom()
                       // reset country to germany if missing obs
                       if (!TRADE[YEAR].hasOwnProperty(COUNTRY)) {
                         COUNTRY = 'DEU'
+                        graph();
                       };
 
                       updateMap();
