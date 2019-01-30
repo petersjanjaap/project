@@ -113,7 +113,7 @@ Headerafbeelding Wikipedia:  https://upload.wikimedia.org/wikipedia/en/thumb/a/a
 Achtergrond: George Hodan - publicdomainpictures.net: https://www.publicdomainpictures.net/en/view-image.php?image=180560&picture=brexit-referendum-uk
 
 # Configuraties
-Er zijn geen configuraties als gitignore toegepast. Deze zijn dus ook niet toegevoegd.
+Er zijn geen configuraties als gitignore toegepast. Deze zijn dus ook niet toegevoegd. Data bevindt zich in de map Pages.
 
 # Licentie
 MIT License
