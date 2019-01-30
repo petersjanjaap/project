@@ -1,8 +1,25 @@
-# project
-visualization of global trade flows
+# Programmeerproject
 https://petersjanjaap.github.io/project/Pages/index.html
+Jan Peters 10452125
 
-**Veranderingen**
+Global Britain (Visualization of global trade flows with the U.K.)
+
+# Beschrijving
+Dit project geeft een weergave van handelsstromen (export en import) van het VK over de jaren 2000 - 2017 in drie verschillende visualizaties. De eerste is een heatmap gebaseerd op het percentage van de handelsspartner met het VK in respectievelijk totale export of import die de gebruiker kan selecteren:
+![alt text](https://github.com/petersjanjaap/project/blob/master/Images/Index_p1.png)
+
+Verder kan de gebruiker d.m.v. info buttons informatie over de visualizatie op vragen. Andere visualizaties die zijn gebruikt zijn een lijngrafiek om de totale waarde van export en import met de geselecteerde partner over alle jaren te bekijken, een sun burst die het aandeel van verschillende sectoren in export en import weergeeft en een bar chart die het relatieve aandeel van verschillende sectoren in het GDP van het partnerland weergeeft om te zien of deze partner een veelbelovende handelspartner is.
+![alt text](https://github.com/petersjanjaap/project/blob/master/Images/Index_p2.png)
+
+Verder kan de gebruiker op de Brexit pagina via de navigatiebar een video bekijken met uitleg over de invloed van Brexit op Britse handel bekijken en live de nieuwsfeed van verschillende vooraanstaande nieuwsbronnen selecteren.
+![alt text](https://github.com/petersjanjaap/project/blob/master/Images/Brexit.png)
+
+De laatste pagina is een overzicht met een beschrijving van alle gebruikte visualizaties en de gebruikte libraries en add-ins voor dit project. Daarnaast wordt er gelinkt naar de GIT repository en kunnen overige bronnen in deze README worden teruggelezen.
+![alt text](https://github.com/petersjanjaap/project/blob/master/Images/About.png)
+
+
+# Veranderingen
+Dit gedeelte geeft een overzicht van alle veranderingen sinds het begin van dit project.
 
 8-1-2019: 
 In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Britain', ofwel handelsstromen van de UK met de rest van de wereld.  
@@ -16,15 +33,16 @@ In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Brit
 De GDP componenten wil ik in plaats van een pie chart in een bar chart weergeven, omdat dit overzichtelijker is met een totaal van 7 variabelen.
 
 15-1-2019:
-Bezig met eens sun burst chart i.p.v. http://www.brightpointinc.com/united-states-trade-deficit/ deze visualisatie. Sun burst heeft betere documentatie en is voor visualisatie nog steeds interessant door export en import op te delen. Ik heb al meerdere malen een vraag ingediend via de website hierover, maar nog geen reactie gehad van assistentie.
+Bezig met eens sun burst chart i.p.v. deze visualisatie http://www.brightpointinc.com/united-states-trade-deficit/. Sun burst heeft betere documentatie en is voor visualisatie nog steeds interessant omdat het export en import opdeelt. 
 
 25-1-2019:
 Besloten een line chart toe te voegen om de ontwikkeling van export en import tussen UK en geselecteerd land over tijd te kunnen bekijken. Deze is verwerkt op de pagina.
 
 28-1-2019:
-Navigatie bar toegevoegd met nieuwe html pagina's voor verhaal over Brexit en verwijzingen naar externe library's en data
+Navigatie bar toegevoegd met nieuwe html pagina's voor verhaal over Brexit en verwijzingen naar externe library's en data.
 
-**Acknowledgements:**
+# Bronnen
+Voor alle bronnen hieronder vermeld heb ik de licentie gecheckt. Per codefile staat vermeld welke bronnen voor welk doel zijn gebruikt, de inhoud hiervan is afkomstig van de desbetreffende auteur en vallen onder hun oorspronkelijke licentie.
 
 **project.js:**
 
@@ -53,26 +71,58 @@ Redraw sun and interactivity: https://bl.ocks.org/denjn5/6d161cb24695c8df503f910
 **linechart.js:**
 
 
-line graph: http://bl.ocks.org/d3noob/7030f35b72de721622b8
+Line graph: http://bl.ocks.org/d3noob/7030f35b72de721622b8
 
-circles: https://bl.ocks.org/NGuernse/58e1057b7174fd1717993e3f5913d1a7
+Circles: https://bl.ocks.org/NGuernse/58e1057b7174fd1717993e3f5913d1a7
 
-tick format: https://bl.ocks.org/mbostock/9764126
+Tick format: https://bl.ocks.org/mbostock/9764126
 
-stroke: https://bl.ocks.org/mbostock/5649592
+Stroke: https://bl.ocks.org/mbostock/5649592
 
 **project.css:**
 
-overall layout: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html
+Overall layout: https://gist.github.com/woodyrew/645d0258415db9205da52cb0e049ca28#file-index-html
 
-navigation bar: https://www.w3schools.com/css/css_navbar.asp
+Navigation bar: https://www.w3schools.com/css/css_navbar.asp
 
-box shadow: https://css-tricks.com/snippets/css/css-box-shadow/
+Box shadow: https://css-tricks.com/snippets/css/css-box-shadow/
 
 **html:**
 
-bootstrap grids https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h
+Bootstrap grids https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_inverse&stacked=h
 
-image in title bar: https://stackoverflow.com/questions/15786937/add-image-in-title-bar
+Image in title bar: https://stackoverflow.com/questions/15786937/add-image-in-title-bar
 
-navigation bar: https://www.w3schools.com/css/css_navbar.asp
+Navigation bar: https://www.w3schools.com/css/css_navbar.asp
+
+**Afbeeldingen en video**
+
+Video: Universiteit Groningen - https://www.youtube.com/watch?v=HEN0pppgjrw
+
+Headerafbeelding Wikipedia:  https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1280px-Flag_of_the_United_Kingdom.svg.png
+
+Achtergrond: George Hodan - publicdomainpictures.net: https://www.publicdomainpictures.net/en/view-image.php?image=180560&picture=brexit-referendum-uk
+
+# Licentie
+MIT License
+
+Copyright (c) 2019 petersjanjaap
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+Readme heeft nu een volledige beschrijving van wat het doel is van dit project met ondersteuning van verschillende screenshots. Daarnaast de readme opgedeeld in beschrijving, veranderingen, bronnen en licentie
