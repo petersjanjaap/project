@@ -88,3 +88,11 @@
 - fixed GIT repository
 - further cleaned code
 - added info buttons to visualizations
+
+#day 18
+- fully updated readme including sources, description, license and screenshots
+- made a report.md to be written tomorrow
+- added interactivity to line chart
+- last adjustments to overall layout and brexit page
+- video and newsfeed for brexit page
+- beautified html scripts
