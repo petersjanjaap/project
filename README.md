@@ -67,6 +67,12 @@ Sun: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 
 Redraw sun and interactivity: https://bl.ocks.org/denjn5/6d161cb24695c8df503f9109045ea629
 
+**barchart.js**
+
+
+bar chart: https://alignedleft.com/tutorials/d3/making-a-bar-chart
+
+rotatie titels x-as: https://bl.ocks.org/mbostock/4403522
 
 **linechart.js:**
 
