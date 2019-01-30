@@ -5,6 +5,7 @@ Jan Peters 10452125
 Global Britain (Visualization of global trade flows with the U.K.)
 
 # Beschrijving
+Open pagina op normale zoom!
 Dit project geeft een weergave van handelsstromen (export en import) van het VK over de jaren 2000 - 2017 in drie verschillende visualizaties. De eerste is een heatmap gebaseerd op het percentage van de handelsspartner met het VK in respectievelijk totale export of import die de gebruiker kan selecteren:
 ![alt text](https://github.com/petersjanjaap/project/blob/master/Images/Index_p1.png)
 
