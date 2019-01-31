@@ -1,6 +1,7 @@
 # Programmeerproject
 https://petersjanjaap.github.io/project/Pages/index.html
 
+Product video: https://project.mprog.nl/milestones/product-demo \
 
 Jan Peters 10452125
 
