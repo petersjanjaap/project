@@ -1,8 +1,14 @@
 # Programmeerproject
 https://petersjanjaap.github.io/project/Pages/index.html
+
+Product video: https://project.mprog.nl/milestones/product-demo \
+
 Jan Peters 10452125
 
 Global Britain (Visualization of global trade flows with the U.K.)
+
+Voor oorspronkelijk proposal, zie map: Proposal 
+
 
 # Beschrijving
 Open pagina op normale zoom, bij voorkeur op een laptop. Alles is getest in Firefox.
@@ -23,7 +29,7 @@ De laatste pagina is een overzicht met een beschrijving van alle gebruikte visua
 Dit gedeelte geeft een overzicht van alle veranderingen sinds het begin van dit project.
 
 8-1-2019: 
-In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Britain', ofwel handelsstromen van de UK met de rest van de wereld.  
+In overleg met Tim ervoor gekozen om te kijken naar het verhaal van 'Global Britain', ofwel handelsstromen van de UK met de rest van de wereld in plaats van alle wereldwijde handelsstromen, omdat de hoeveelheid data excessief zou worden.  
 
 
 10-1-2019:
@@ -104,7 +110,7 @@ Image in title bar: https://stackoverflow.com/questions/15786937/add-image-in-ti
 
 Navigation bar: https://www.w3schools.com/css/css_navbar.asp
 
-**Afbeeldingen en video**
+**Afbeeldingen en video's:**
 
 Video: Universiteit Groningen - https://www.youtube.com/watch?v=HEN0pppgjrw
 
