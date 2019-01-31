@@ -33,6 +33,9 @@ First the svg, bars (including tooltips), axes titles and info buttons are creat
 _HTML files_\
 All HTML files use bootstrap to divide the SVG in a well-looking pattern. In the top the navigation bars are entered with the links to the relevant pages. Styles for all elements are included in the css file in the MAP styles. The SVG's for the visualizations are already included in the grids and classified with the name relevant to the visualations, for example svg class="map". The SVG's are selected in all scripts to adjust height and width etc. In this way the SVG's are placed in the right part of the grid. Index.html contains all visualizations and is used as home page, brexit.html contains a video on the effect of Brexit on trade and has a newsfeed linking to the Brexit sections of six news sources. The user can remain up to date about Brexit and know more on the complexity of trade and Brexit. In the about.html all visualizations are described and the links are provided to the add-ins and libraries, data and this Github repository. 
 
+_project.ss_\
+The project css contains the style for all pages and elements. It selects the edges for the svg's opacity of the backgrounds, roundness of the borders of elements, styles the tooltip. All fonts are set to Times. The background is set to a Brexit flag showing the EU and UK flag together in a dark setting. Some elements are selected specifically by class or id, if their layout had to differ from similar types of elements.  
+
 
 # Challenges
 **Changes**\
